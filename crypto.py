@@ -17,3 +17,5 @@ for i in range(21600):
     price_data = np.append(price_data, resp.json()['price'])
     price_data.tofile('prices.csv', sep=',')
     time.sleep(4)
+
+    
