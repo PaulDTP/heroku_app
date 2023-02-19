@@ -7,9 +7,5 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    
-    
+    return 'Hello from Flask!'
 
-@app.route('/bitcoin')
-def bruh():
-    return "You fuckin wut mate?"
