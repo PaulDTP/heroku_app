@@ -1,11 +1,28 @@
+from flask import Flask, render_template
+import matplotlib.pyplot as plt
+import io
+import base64
+import numpy as np
 
-# A very simple Flask Hello World app for you to get started with...
+app = Flask(__name__, template_folder='templates')
 
-from flask import Flask
+@app.route("/")
+def index():
+    # Generate the plot data
+    x = np.linspace(0, 2*np.pi, 100)
+    y = np.sin(x)
 
-app = Flask(__name__)
+    # Generate the plot
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
 
-@app.route('/')
-def hello_world():
-    return 'Hello from Flask!'
+    # Save the plot to a buffer
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format="png")
+    buffer.seek(0)
 
+    # Encode the buffer as a base64 string
+    plts = base64.b64encode(buffer.getvalue()).decode()
+
+    # Pass the plot to the template
+    return render_template("index.html", plot_data=plts)
