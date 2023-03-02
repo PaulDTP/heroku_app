@@ -13,22 +13,17 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 
-price_data = np.array([])
-
-# Binance Initialization
 from binance.client import Client
+import plotly.graph_objs as go
+import websocket
+import json
 
 api_key='sN8B8IP18Sba4xi7X5aX2TaQtxMu8zxr5o2FkPxZvZBDXwwFT7Sl9VYzeILh4bCi'
 api_secret='3BObFKszldGkDE9GjFe9YQpwPr0i0JJWVUGsU3EWR7KwDUCucDoVNl0GQwiOolkG'
 
 client = Client(api_key, api_secret, testnet=True, tld='us')
 
-for i in range(21600):
-    resp = requests.get('https://api.binance.us/api/v3/ticker/price?symbol=BTCUSD')
-    price_data = np.append(price_data, resp.json()['price'])
-    price_data.tofile('prices.csv', sep=',')
-    time.sleep(4)
-
+url = "wss://stream.binancefuture.com"
 
 def make_graph():
     # Make the API call
@@ -42,3 +37,24 @@ def make_graph():
     # Plot the data
     fig = px.line(df, x=df.index, y="price")
     return fig
+
+x_data = []
+y_data = []
+
+def on_message(ws, message):
+    data = json.loads(message)
+    y = data['k']['c']
+    x_data.append(data['E'])
+    y_data.append(y)
+    
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='lines', name='Bitcoin Price'))
+    fig.update_layout(title='Bitcoin Price', xaxis_title='Time', yaxis_title='Price (USD)')
+    fig.show()
+
+if __name__ == "__main__":
+    websocket.enableTrace(True)
+    ws = websocket.WebSocketApp("wss://stream.binance.com:9443/ws/btcusdt@kline_1m",
+                                on_message=on_message)
+    ws.run_forever()
+

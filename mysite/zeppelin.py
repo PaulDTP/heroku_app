@@ -16,7 +16,7 @@ app.layout = html.Div(children=[
 
     dcc.Graph(
         id='crypto graph',
-        figure=fig
+        figure=crypto_graph
     )
     ])
 
