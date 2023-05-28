@@ -20,23 +20,19 @@ import plotly.express as px
 # API Key: odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd
 # Secret key: Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK
 
-# api eee8e2d1bfc46b546f74a0152e841ead60322a3eebe9197dc8aed462fb35c13c
-# secret 6644db47ed44d9da102b3c9134d52324769a8079c8c89dd1cee365d4f88d0889
+api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
+api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 
-
-api_key='sN8B8IP18Sba4xi7X5aX2TaQtxMu8zxr5o2FkPxZvZBDXwwFT7Sl9VYzeILh4bCi'
-api_secret='3BObFKszldGkDE9GjFe9YQpwPr0i0JJWVUGsU3EWR7KwDUCucDoVNl0GQwiOolkG'
-
-client = Client(api_key, api_secret, testnet=True, tld='us')
+client = Client(api_key, api_secret, testnet=True, tld='us');
 
 # Websocket base endpoint
 wss = "wss://stream.binancefuture.com"
 # Base endpoint
 base = 'https://testnet.binancefuture.com'
-# User date endpoint
+# User data endpoint
 
 
-def get_updated():
+def last_updated():
     # Last update from git commit
     repo = git.Repo("/home/pauldtp/z-algo").head.commit
     return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))
