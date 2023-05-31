@@ -25,34 +25,31 @@ api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 
 client = Client(api_key, api_secret, testnet=True, tld='us');
 
+max_messages = 10
+
+
 # Websocket base endpoint
 wss = "wss://stream.binancefuture.com"
 # Base endpoint
 base = 'https://testnet.binancefuture.com'
 # User data endpoint
 
-
+# Gives the last update from git commit
+# @return a human readable string of when the last z-algo git commit occurred
 def last_updated():
-    # Last update from git commit
     repo = git.Repo("/home/pauldtp/z-algo").head.commit
     return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))
 
-def make_graph():
-    # Make the API call
-    url = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
-    response = requests.get(url)
-    data = response.json() 
+def on_open(ws):
+    print("WebSocket connection opened")
 
-    # Store the data in a Pandas dataframe
-    df = pd.DataFrame(data, index=[0])
+def on_error(ws, error):
+    print("WebSocket error:", error)
 
-    # Plot the data
-    fig = px.line(df, x=df.index, y="price")
-    return fig
+def on_close(ws):
+    print("WebSocket connection closed")
 
-x_data = []
-y_data = []
-
+# intended to update the dashboard graph 
 def on_message(ws, message):
     data = json.loads(message)
     y = data['k']['c']
@@ -64,9 +61,40 @@ def on_message(ws, message):
     fig.update_layout(title='Bitcoin Price', xaxis_title='Time', yaxis_title='Price (USD)')
     fig.show()
 
+    # Terminate the WebSocket connection after reaching the maximum number of messages
+    if len(timestamps) >= max_messages:
+        ws.close()
+
+# Takes data from on_message(ws, message) to return a graph existing graph and updates it on the dashboard
+# @return the graph created from parsing the json response file
+def make_graph():
+    # Make the API call
+    ws = websocket.WebSocketApp(
+        url=ws_url,
+        on_open=on_open,
+        on_message=on_message,
+        on_error=on_error,
+        on_close=on_close
+    )
+    data = response.json() 
+
+    # need to access data somewhere here
+
+    # Store the data in a Pandas dataframe
+    df = pd.DataFrame(data, index=[0])
+
+    # Plot the data
+    fig = px.line(df, x=df.index, y="price")
+    return fig
+
+x_data = []
+y_data = []
+
 if __name__ == "__main__":
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp("wss://stream.binance.com:9443/ws/btcusdt@kline_1m",
                                 on_message=on_message)
     ws.run_forever()
+
+
 

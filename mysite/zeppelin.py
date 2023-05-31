@@ -53,10 +53,11 @@ crypto_graph = backend.make_graph()
 updated = backend.last_updated()
 time_interval=1000
 
+# dashboard layout
 app.layout = html.Div(children=[
     html.H2(children=f"Last update: {updated} UTC"),
     #html.Div(children="Menu"),
-    dcc.Dropdown(['Current Coin Prices', 'Our Trades', 'Our Returns'], 'Current Coin Prices'),
+    dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices'),
     dcc.Graph(id='crypto-graph', figure=crypto_graph),
     dcc.Interval(interval=time_interval)
     #, generate_table(data)
