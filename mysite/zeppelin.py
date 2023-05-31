@@ -16,7 +16,7 @@ from dash import dash, html, dcc, Input, Output
 # custom files
 import backend
 
-app = dash.Dash()
+app = dash.Dash(__name__)
 
 # Google Analytics tag
 app.index_string = '''
@@ -49,7 +49,7 @@ app.index_string = '''
 '''
 
 # retrieving components for dashboard display
-crypto_graph = backend.make_graph()
+crypto_graph = backend.make_graph(app)
 updated = backend.last_updated()
 time_interval=1000
 
@@ -64,5 +64,6 @@ app.layout = html.Div(children=[
 
 ])
 
+# Run the app
 if __name__ == '__main__':
     app.run_server(debug=True)
