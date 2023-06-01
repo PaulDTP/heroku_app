@@ -1,7 +1,7 @@
 '''
 Authored by Isaiah Terrell-Perica
 05/31/2023
-This file handles websocket connections and data for coins. 
+This file handles all websocket connections and data, calling inherited functions for processing and visualization.
 '''
 import websocket
 import json
@@ -24,9 +24,9 @@ api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 client = Client(api_key, api_secret, testnet=True, tld='us');
 
 # Websocket base endpoint
-wss = "wss://stream.binancefuture.com"
+# wss = "wss://stream.binancefuture.com"
 # Base endpoint
-base = 'https://testnet.binancefuture.com'
+# base = 'https://testnet.binancefuture.com'
 # User data endpoint
 user_data = '' # find in binance API
 
@@ -43,19 +43,25 @@ def on_message(ws, message):
     num_messages += 1
 
     # Terminate the WebSocket connection after reaching the maximum number of messages
-    if num_messages >= 10:
-        ws.close()
+    '''if num_messages >= 10:
+        if ws.sock and ws.sock.connected:
+            ws.close()
+        else:
+            print("WebSocket connection is already closed.")'''
 
 def on_error(ws, error):
     print("WebSocket error:", error)
 
 def on_close(ws, close_status_code, close_msg):
-    print(close_status_code)
-    print(close_msg)
-    print("WebSocket connection closed")
+    if ws.sock and ws.sock.connected:
+        print(close_status_code)
+        print(close_msg)
+        print("WebSocket connection closed.")
+    else:
+        print("WebSocket connection is already closed.")
 
 def start_websocket():
-    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@miniTicker'
+    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@kline_1m'
     # Make the API call
     ws = websocket.WebSocketApp(
         url=ws_url,

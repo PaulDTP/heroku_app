@@ -16,7 +16,7 @@ from dash import dash, html, dcc, Input, Output
 
 # Custom files
 import backend
-from data_streams import start_websocket
+from websocket_streams import start_websocket
 
 app = dash.Dash(__name__)
 
@@ -50,6 +50,7 @@ app.index_string = '''
 </html>
 '''
 
+# Start websocket and
 start_websocket()
 backend.register_callbacks(app)
 # Retrieving components for dashboard display
@@ -65,7 +66,6 @@ app.layout = html.Div(children=[
     dcc.Graph(id='crypto-graph', figure=crypto_graph),
     dcc.Interval(id='interval', interval=time_interval)
     #, generate_table(data)
-
 ])
 
 # Run the app
