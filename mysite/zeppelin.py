@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Authored by Isaiah Terrell-Perica
 05/26/2023
@@ -13,8 +14,9 @@ Authored by Isaiah Terrell-Perica
 
 from dash import dash, html, dcc, Input, Output
 
-# custom files
+# Custom files
 import backend
+from data_streams import start_websocket
 
 app = dash.Dash(__name__)
 
@@ -48,8 +50,10 @@ app.index_string = '''
 </html>
 '''
 
-# retrieving components for dashboard display
-crypto_graph = backend.make_graph(app)
+start_websocket()
+backend.register_callbacks(app)
+# Retrieving components for dashboard display
+crypto_graph = backend.make_graph()
 updated = backend.last_updated()
 time_interval=1000
 
@@ -57,9 +61,9 @@ time_interval=1000
 app.layout = html.Div(children=[
     html.H2(children=f"Last update: {updated} UTC"),
     #html.Div(children="Menu"),
-    dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices'),
+    dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices', id='dropdown'),
     dcc.Graph(id='crypto-graph', figure=crypto_graph),
-    dcc.Interval(interval=time_interval)
+    dcc.Interval(id='interval', interval=time_interval)
     #, generate_table(data)
 
 ])
