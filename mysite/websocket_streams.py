@@ -3,7 +3,10 @@ Authored by Isaiah Terrell-Perica
 05/31/2023
 This file handles all websocket connections and data, calling inherited functions for processing and visualization.
 '''
-import websocket
+import asyncio
+import time
+
+import websockets
 import json
 from binance.client import Client
 
@@ -17,10 +20,10 @@ from backend import data_processing
 # API Key: odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd
 # Secret key: Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK
 
-#testnet api
+# Testnet API
 api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
 api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
-# gets Binance user data from the Testnet using respective API key
+# Gets Binance user data from the Testnet using respective API key
 client = Client(api_key, api_secret, testnet=True, tld='us');
 
 # Websocket base endpoint
@@ -29,46 +32,36 @@ client = Client(api_key, api_secret, testnet=True, tld='us');
 # base = 'https://testnet.binancefuture.com'
 # User data endpoint
 user_data = '' # find in binance API
+open_websockets = []
 
-# Counts number of messages received
-num_messages = 0
+# Close all open websockets
+#TODO change print statements to log statements
+async def close_websockets():
+    print("Closing all websockets...")
+    for ws in open_websockets.copy():
+        await ws.close()
+        open_websockets.remove(ws)
+    print("Done")
 
-def on_open(ws):
-    print("WebSocket connection opened")
+# Define the WebSocket connection logic
+async def start_websocket(type):
+    global open_websockets
+    try:
+        if type == 'binance':
+            async with websockets.connect('wss://testnet.binance.vision/ws/btcusdt@kline_1m') as ws:
+                print("WebSocket connection opened")
+                open_websockets.append(ws)
+                while True:
+                    #start_time = time.time()
+                    data = await ws.recv()
+                    #elapsed_time = time.time() - start_time
+                    #print(f"Received data in {elapsed_time} seconds: {data}")
+                    data_processing(data)
+    except websockets.exceptions.ConnectionClosedError:
+        print("WebSocket connection closed")        
 
-#  Updates the dashboard graph after receiving data
-def on_message(ws, message):
-    global num_messages
-    data_processing(message)
-    num_messages += 1
-
-    # Terminate the WebSocket connection after reaching the maximum number of messages
-    '''if num_messages >= 10:
-        if ws.sock and ws.sock.connected:
-            ws.close()
-        else:
-            print("WebSocket connection is already closed.")'''
-
-def on_error(ws, error):
-    print("WebSocket error:", error)
-
-def on_close(ws, close_status_code, close_msg):
-    if ws.sock and ws.sock.connected:
-        print(close_status_code)
-        print(close_msg)
-        print("WebSocket connection closed.")
-    else:
-        print("WebSocket connection is already closed.")
-
-def start_websocket():
-    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@kline_1m'
-    # Make the API call
-    ws = websocket.WebSocketApp(
-        url=ws_url,
-        on_open=on_open,
-        on_message=on_message,
-        on_error=on_error,
-        on_close=on_close
-    )
-    ws.run_forever()
+'''# Start the WebSocket connection in a separate task
+async def hmm_websocket(type):
+    await connect_websocket(type)
+'''
 
