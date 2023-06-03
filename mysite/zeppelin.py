@@ -7,7 +7,7 @@ This file handles the display of the Zeppelin web-app.
 - A Google Analytics tag is included but is not currently needed.
 - The web-app requires:
     1) a dropdown selector with options
-    2) indicators of interest clearly visualized
+    2) financialindicators of interest clearly visualized
     3) a summary of the connected accounts' information
 - Zeppelin currently uses Binance for price data and account info
 '''
@@ -51,39 +51,46 @@ app.index_string = '''
 </html>
 '''
 
-# Creates Zeppelin using relevant Dash components
-def create_zeppelin():
-    # Retrieving components for Zeppelin
-    crypto_graph = backend.make_graph()
-    backend.register_callbacks(app)
-    updated = backend.last_updated()
-    time_interval=1000 # in milliseconds
+# Retrieving components for Zeppelin
+crypto_graph = backend.make_graph()
+backend.register_callbacks(app)
+updated = backend.last_updated()
+time_interval=1000 # in milliseconds
 
-    # Dashboard layout
-    app.layout = html.Div(children=[
-        html.H2(children="Zeppelin"),
-        html.Div(children=f"Last commit: {updated} UTC"),
-        dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
-        dcc.Graph(id='crypto-graph', figure=crypto_graph),
-        dcc.Interval(id='interval', interval=time_interval)
-        #, generate_table(data)
-    ])    
+# Dashboard layout
+app.layout = html.Div(children=[
+    html.H2(children="Zeppelin"),
+    html.Div(children=f"Last commit: {updated} UTC"),
+    dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
+    dcc.Graph(id='crypto-graph', figure=crypto_graph),
+    dcc.Interval(id='interval', interval=time_interval)
+    #, generate_table(data)
+])    
 
 # Starts websocket connection and other asynchronous tasks with asyncio
-async def async_tasks():
+def async_tasks(loop):
     # Creating asynchronous tasks to be run in the event loop
-    await start_websocket("binance")
-    await close_websockets()
+    tasks = [
+        loop.create_task(start_websocket("binance"))
+    ]
+    loop.run_forever()
+    #await asyncio.gather(*tasks)
 
+# Starts a new thread to run asyncio tasks
+# @return the newly created event loop
 def start_thread():
     # Creating thread to run websockets in
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    t = threading.Thread(target=asyncio.run, args=(async_tasks(),), daemon=True)
+    t = threading.Thread(target=async_tasks, args=(loop,), daemon=True)
     t.start()
+    return loop
 
 # Run the Dash server
 if __name__ == '__main__':
-    create_zeppelin()
-    start_thread()
-    app.run_server(debug=True)
+    loop = start_thread()
+    try:
+        app.run_server(debug=True)
+    finally:
+        loop.call_soon_threadsafe(loop.create_task, close_websockets(loop))
+        loop.stop()

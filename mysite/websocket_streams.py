@@ -1,7 +1,7 @@
 '''
 Authored by Isaiah Terrell-Perica
 05/31/2023
-This file handles all websocket connections and data, calling inherited functions for processing and visualization.
+This file handles all websocket connections and data, calling inherited functions for processing.
 '''
 import asyncio
 import time
@@ -36,14 +36,19 @@ open_websockets = []
 
 # Close all open websockets
 #TODO change print statements to log statements
-async def close_websockets():
+async def close_websockets(loop):
     print("Closing all websockets...")
     for ws in open_websockets.copy():
-        await ws.close()
-        open_websockets.remove(ws)
+        try:
+            open_websockets.remove(ws)
+            await loop.run_in_executor(None, ws.close)
+        except Exception as e:
+            print(f"Error closing websocket: {e}")
+        else:
+            open_websockets.remove(ws)
     print("Done")
 
-# Define the WebSocket connection logic
+# Starts websocket connections and calls appropriate processing function(s)
 async def start_websocket(type):
     global open_websockets
     try:

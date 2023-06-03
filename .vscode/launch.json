@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python: Debug",
+        "type": "python",
+        "request": "launch",
+        "module": "${workspaceFolder}/mysite/zeppelin.py",
+        "console": "integratedTerminal",
+        "env": {
+          "DEBUGPY_LAUNCHER_PORT": "8050"
+        },
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "envFile": "${workspaceFolder}/.env",
+        "stopOnEntry": false,
+        "justMyCode": false,
+        "showReturnValue": true,
+        "redirectOutput": false,
+        "postDebugTask": ""
+      }
+    ]
+  }
+  

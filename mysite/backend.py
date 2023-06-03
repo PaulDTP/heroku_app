@@ -19,7 +19,7 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import plotly.express as px
 
-max_queue_size = 10
+max_queue_size = 1000
 # X and Y axis data using deque for automatic resizing - check space
 timestamps = deque(maxlen=max_queue_size)
 prices = defaultdict(lambda: deque(maxlen=max_queue_size))
@@ -49,10 +49,10 @@ def data_processing(message):
     # When receiving kline data:
     timestamps.append(time_conv(data['E']))
     data = data['k']
-    prices['open'].append(data['o'])
-    prices['high'].append(data['h'])
-    prices['low'].append(data['l'])
-    prices['close'].append(data['c'])
+    prices['open'].append(float(data['o']))
+    prices['high'].append(float(data['h']))
+    prices['low'].append(float(data['l']))
+    prices['close'].append(float(data['c']))
 
     # Other data types:
     '''
@@ -91,9 +91,15 @@ def register_callbacks(app):
         low_prices = list(prices['low'])
         high_prices = list(prices['high'])
 
+        # Extending y-axis for easier viewing
+        price_min = min(low_prices)
+        price_max = max(high_prices)
+        extended_min = price_min - 0.5 * (price_max - price_min)
+        extended_max = price_max + 0.5 * (price_max - price_min)
+
         # Update Figure object with new timestamp and price data
         fig.update_xaxes(range=[min(time_axis), max(time_axis)])
-        fig.update_yaxes(range=[min(low_prices), max(high_prices)])
+        fig.update_yaxes(range=[extended_min, extended_max])
         fig.update_traces(
             x=time_axis,
             open=open_prices,
