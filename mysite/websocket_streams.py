@@ -41,7 +41,7 @@ async def close_websockets(loop):
     for ws in open_websockets.copy():
         try:
             open_websockets.remove(ws)
-            await loop.run_in_executor(None, ws.close)
+            await ws.close()
         except Exception as e:
             print(f"Error closing websocket: {e}")
         else:
