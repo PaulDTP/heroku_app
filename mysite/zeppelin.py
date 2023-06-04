@@ -69,8 +69,9 @@ app.layout = html.Div(children=[
 
 # Starts websocket connection and other asynchronous tasks with asyncio
 def async_tasks(loop):
+    # Array of exchanges to be connected to through websockets
+    # - New exchanges must be added to start_websocket(*) also
     exchanges = ['binance']
-    tasks = []
     # Creating asynchronous tasks to be run in the event loop
     for x in exchanges:
         loop.create_task(start_websocket(x))
