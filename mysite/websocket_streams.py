@@ -8,7 +8,7 @@ import time
 
 import websockets
 import json
-from binance.client import Client
+#from binance.client import Client
 
 from backend import data_processing
 from logger import log_status
@@ -25,7 +25,7 @@ from logger import log_status
 api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
 api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 # Gets Binance user data from the Testnet using respective API key
-client = Client(api_key, api_secret, testnet=True, tld='us');
+##client = Client(api_key, api_secret, testnet=True, tld='us');
 
 # Websocket base endpoint
 # wss = "wss://stream.binancefuture.com"
@@ -64,9 +64,3 @@ async def start_websocket(type):
                     data_processing(data)
     except websockets.exceptions.ConnectionClosedError:
         log_status('info', "WebSocket connection closed")        
-
-'''# Start the WebSocket connection in a separate task
-async def hmm_websocket(type):
-    await connect_websocket(type)
-'''
-
