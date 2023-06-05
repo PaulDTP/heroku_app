@@ -16,7 +16,7 @@ import asyncio
 from dash import dash, html, dcc, Input, Output
 import threading
 
-import backend
+from backend import make_graph, last_updated, register_callbacks
 from websocket_streams import start_websocket, close_websockets
 
 app = dash.Dash(__name__)
@@ -52,9 +52,9 @@ app.index_string = '''
 '''
 
 # Retrieving components for Zeppelin
-crypto_graph = backend.make_graph()
-backend.register_callbacks(app)
-updated = backend.last_updated()
+crypto_graph = make_graph()
+register_callbacks(app)
+updated = last_updated()
 time_interval=1000 # in milliseconds
 
 # Dashboard layout

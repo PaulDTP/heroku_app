@@ -11,6 +11,7 @@ import json
 from binance.client import Client
 
 from backend import data_processing
+from logger import log_status
 
 # Binance
 # API key: sN8B8IP18Sba4xi7X5aX2TaQtxMu8zxr5o2FkPxZvZBDXwwFT7Sl9VYzeILh4bCi
@@ -35,18 +36,17 @@ user_data = '' # find in binance API
 open_websockets = []
 
 # Close all open websockets
-#TODO change print statements to log statements
 async def close_websockets(loop):
-    print("Closing all websockets...")
+    log_status('info', "Closing all websockets...")
     for ws in open_websockets.copy():
         try:
             open_websockets.remove(ws)
             await ws.close()
         except Exception as e:
-            print(f"Error closing websocket: {e}")
+            log_status('error', f"Error closing websocket: {e}")
         else:
             open_websockets.remove(ws)
-    print("Done")
+    log_status('info', "Done")
 
 # Starts websocket connections and calls appropriate processing function(s)
 async def start_websocket(type):
@@ -54,7 +54,7 @@ async def start_websocket(type):
     try:
         if type == 'binance':
             async with websockets.connect('wss://testnet.binance.vision/ws/btcusdt@kline_1m') as ws:
-                print("WebSocket connection opened")
+                log_status('info', "WebSocket connection opened")
                 open_websockets.append(ws)
                 while True:
                     #start_time = time.time()
@@ -63,7 +63,7 @@ async def start_websocket(type):
                     #print(f"Received data in {elapsed_time} seconds: {data}")
                     data_processing(data)
     except websockets.exceptions.ConnectionClosedError:
-        print("WebSocket connection closed")        
+        log_status('info', "WebSocket connection closed")        
 
 '''# Start the WebSocket connection in a separate task
 async def hmm_websocket(type):

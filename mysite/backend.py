@@ -19,6 +19,8 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import plotly.express as px
 
+from logger import log_status
+
 max_queue_size = 1000
 # X and Y axis data using deque for automatic resizing - check space
 timestamps = deque(maxlen=max_queue_size)
@@ -46,11 +48,14 @@ def time_conv(timestamp):
 # Takes data from on_message(ws, message) to process data for the dashboard graph
 # @return the graph created from parsing the json response file
 def data_processing(message):
-    data = json.loads(message)
+    log_status('debug', 'Data received.')
 
+    data = json.loads(message)
     # When receiving kline data:
-    timestamps.append(time_conv(data['E']))
+    timestamp = time_conv(data['E'])
+    timestamps.append(timestamp)
     data = data['k']
+
     prices['open'].append(float(data['o']))
     prices['high'].append(float(data['h']))
     prices['low'].append(float(data['l']))
