@@ -49,13 +49,12 @@ def time_conv(timestamp):
 # @return the graph created from parsing the json response file
 def data_processing(message):
     log_status('debug', 'Data received.')
-
     data = json.loads(message)
+
     # When receiving kline data:
     timestamp = time_conv(data['E'])
     timestamps.append(timestamp)
     data = data['k']
-
     prices['open'].append(float(data['o']))
     prices['high'].append(float(data['h']))
     prices['low'].append(float(data['l']))
@@ -118,5 +117,6 @@ def register_callbacks(app):
 
     # Changes main page depending on dropdown selection
     # @return the selection made on the main page
+    #@app.callback(Output('crypto-graph'))
     def dropdown_changes(_):
         return fig

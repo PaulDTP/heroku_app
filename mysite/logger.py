@@ -22,7 +22,7 @@ A serious error, indicating that the program itself may be unable to continue ru
 import logging
 
 # Setting configuration for log messages
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Creates a log message with severity and message
 def log_status(severity, message):
@@ -37,4 +37,4 @@ def log_status(severity, message):
     elif severity == 'critical':
         logging.critical(message)
     else:
-        logging.warning(f"Incorrect usage of log status. Message: {message}")
+        logging.warning(f"Incorrect usage of log_status call. Message: {severity}:{message}")
