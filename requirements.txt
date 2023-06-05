@@ -15,7 +15,7 @@ argcomplete==2.0.0
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 arrow==1.2.3
-arviz==0.14.0
+arviz==0.15.1
 asgiref==3.5.2
 asn1crypto==1.5.1
 astor==0.8.1
