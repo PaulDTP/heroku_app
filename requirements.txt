@@ -298,7 +298,7 @@ networkx==2.6.3
 nltk==3.6.7
 notebook==6.5.2
 notebook_shim==0.2.2
-numba==0.55.1
+numba==0.57.0
 numexpr==2.8.1
 numpy==1.24.2
 oauth2client==4.1.3
