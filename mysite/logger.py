@@ -37,4 +37,4 @@ def log_status(severity, message):
     elif severity == 'critical':
         logging.critical(message)
     else:
-        logging.warning(f"Incorrect usage of log status. Message: {message}")
+        logging.warning(f"Incorrect usage of log_status call. Message: {severity}:{message}")
