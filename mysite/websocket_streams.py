@@ -51,6 +51,7 @@ async def close_websockets(loop):
 # Starts websocket connections and calls appropriate processing function(s)
 async def start_websocket(type):
     global open_websockets
+    print('starting websocket')
     try:
         if type == 'binance':
             async with websockets.connect('wss://testnet.binance.vision/ws/btcusdt@kline_1m') as ws:

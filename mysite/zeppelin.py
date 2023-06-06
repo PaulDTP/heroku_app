@@ -80,6 +80,7 @@ def async_tasks(loop):
     exchanges = ['binance']
     # Creating asynchronous tasks to be run in the event loop
     for x in exchanges:
+        print('exchanges')
         loop.create_task(start_websocket(x))
     loop.run_forever()
     #await asyncio.gather(*tasks)
@@ -87,6 +88,7 @@ def async_tasks(loop):
 # Starts a new thread to run asyncio tasks
 # @return the newly created event loop
 def start_thread():
+    print('thread started')
     # Creating thread to run websockets in
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
