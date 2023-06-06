@@ -53,7 +53,13 @@ app.index_string = '''
 '''
 
 # Retrieving components for Zeppelin
-register_callbacks(app)
+bitcoin = make_graph("Bitcoin Price")
+etherium = make_graph("Etherium Price")
+coin_graphs = {
+    'bitcoin': make_graph("Bitcoin Price"),
+    'etherium': make_graph("Etherium Price")
+}
+register_callbacks(app, coin_graphs)
 time_interval=1000 # in milliseconds
 
 # Dashboard layout
@@ -61,8 +67,8 @@ app.layout = html.Div(children=[
     html.H2(children="Zeppelin"),
     html.Div(children=f"Last commit: {last_updated()} UTC"),
     dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
-    dcc.Graph(id='bitcoin-graph', figure=make_graph()),
-    dcc.Graph(id='eth-graph', figure=make_graph()),
+    dcc.Graph(id='bitcoin-graph', figure=coin_graphs['bitcoin']),
+    dcc.Graph(id='etherium-graph', figure=coin_graphs['etherium']),
     dcc.Interval(id='interval', interval=time_interval)
     #, generate_table(data)
 ])    
@@ -90,7 +96,6 @@ def start_thread():
 
 # Run the Dash server
 if __name__ == '__main__':
-    register_callbacks(app)
     loop = start_thread()
     try:
         app.run_server(debug=True)
