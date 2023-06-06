@@ -33,13 +33,14 @@ fig = go.Figure()
 # Gives the last update from git commit
 # @return a human readable string of when the last ~/z-algo git commit occurred
 def last_updated():
-    if os.environ.get("LOGNAME") == "isaiahtp":
+    '''if os.environ.get("LOGNAME") == "isaiahtp":
         # Local path
         repo = git.Repo("~/Desktop/Zeppelin/z-algo").head.commit
     else:
         # Remote path
         repo = git.Repo("~/z-algo").head.commit
-    return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))
+    return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))'''
+    return "Jun 6 1:33am EST"
 
 #@return a timestamp converted to a human readable format
 def time_conv(timestamp):
