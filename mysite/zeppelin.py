@@ -20,6 +20,7 @@ from backend import make_graph, last_updated, register_callbacks
 from websocket_streams import start_websocket, close_websockets
 
 app = dash.Dash(__name__)
+server = app.server
 
 # Google Analytics tag
 app.index_string = '''
