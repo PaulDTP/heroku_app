@@ -20,6 +20,7 @@ A serious error, indicating that the program itself may be unable to continue ru
 '''
 
 import logging
+import sys
 
 # Setting configuration for log messages
 logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
