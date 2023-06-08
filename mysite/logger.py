@@ -4,38 +4,62 @@ Authored by Isaiah Terrell-Perica
 This file handles Zeppelin's logging.
 
 DEBUG
-Detailed information, typically of interest only when diagnosing problems.
-
+- Detailed information, typically of interest only when diagnosing problems.
 INFO
-Confirmation that things are working as expected.
-
+- Confirmation that things are working as expected.
 WARNING
-An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.
-
+- An indication that something unexpected happened, or indicative of some problem in the near future (e.g. `disk space low`). The software is still working as expected.
 ERROR
-Due to a more serious problem, the software has not been able to perform some function.
-
+- Due to a more serious problem, the software has not been able to perform some function.
 CRITICAL
-A serious error, indicating that the program itself may be unable to continue running.
+- A serious error, indicating that the program itself may be unable to continue running.
 '''
 
-import logging
+import logging, logging.handlers
 import sys
 
-# Setting configuration for log messages
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Setting default configuration for All loggers
+logging.basicConfig(
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO,
+    stream=sys.stdout
+)
+
+# Creating main logger instance
+log_handler = logging.StreamHandler()
+memory_handler = logging.handlers.MemoryHandler(capacity=100, target=log_handler)
+file_handler = logging.FileHandler('app.log')
+
+zep_log = logging.getLogger('Zeppelin')
+zep_log.addHandler(memory_handler)
+zep_log.addHandler(log_handler)
+zep_log.addHandler(file_handler)
+
+
+
+# Creating formatter from the basicConfig formatting
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# Applying the formatter to each handler
+log_handler.setFormatter(formatter)
+memory_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter)
+
+def get_logs():
+    records = memory_handler.buffer.copy()
+    return [x.getMessage() for x in records]
 
 # Creates a log message with severity and message
 def log_status(severity, message):
     if severity == 'debug':
-        logging.debug(message)
+        zep_log.debug(message)
     elif severity == 'info':
-        logging.info(message)
+        zep_log.info(message)
     elif severity == 'warning':
-        logging.warning(message)
+        zep_log.warning(message)
     elif severity == 'error':
-        logging.error(message)
+        zep_log.error(message)
     elif severity == 'critical':
-        logging.critical(message)
+        zep_log.critical(message)
     else:
-        logging.warning(f"Incorrect usage of log_status call. Message: {severity}:{message}")
+        zep_log.warning(f"Incorrect usage of log status call. Message: {severity}:{message}")

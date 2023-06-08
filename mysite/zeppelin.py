@@ -13,10 +13,11 @@ This file handles the display of the Zeppelin web-app.
 '''
 import asyncio
 
-from dash import dash, html, dcc, Input, Output
+from dash import dash, html, dcc
 import threading
 
-from backend import make_graph, last_updated, register_callbacks
+from backend import make_graph, last_updated
+from callbacks import register_callbacks
 from websocket_streams import start_websocket, close_websockets
 
 app = dash.Dash(__name__)
@@ -69,8 +70,9 @@ app.layout = html.Div(children=[
     dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
     dcc.Graph(id='bitcoin-graph', figure=coin_graphs['bitcoin']),
     dcc.Graph(id='etherium-graph', figure=coin_graphs['etherium']),
-    dcc.Interval(id='interval', interval=time_interval)
-    #, generate_table(data)
+    dcc.Interval(id='interval', interval=time_interval),
+    html.H3(children='Logs'),
+    dcc.Textarea(id='logs', style={'width': '100%', 'height': '300px'}, readOnly=True)
 ])    
 
 # Starts websocket connection and other asynchronous tasks with asyncio
@@ -80,7 +82,6 @@ def async_tasks(loop):
     exchanges = ['binance']
     # Creating asynchronous tasks to be run in the event loop
     for x in exchanges:
-        print('exchanges')
         loop.create_task(start_websocket(x))
     loop.run_forever()
     #await asyncio.gather(*tasks)
@@ -88,7 +89,6 @@ def async_tasks(loop):
 # Starts a new thread to run asyncio tasks
 # @return the newly created event loop
 def start_thread():
-    print('thread started')
     # Creating thread to run websockets in
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
