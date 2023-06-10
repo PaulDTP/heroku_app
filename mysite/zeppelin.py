@@ -17,7 +17,7 @@ from dash import dash, html, dcc
 import threading
 
 from backend import make_graph, last_updated
-from callbacks import register_callbacks
+from callback_updates import register_callbacks
 from websocket_streams import start_websocket, close_websockets
 
 app = dash.Dash(__name__)
@@ -54,11 +54,11 @@ app.index_string = '''
 '''
 
 # Retrieving components for Zeppelin
-bitcoin = make_graph("Bitcoin Price")
-etherium = make_graph("Etherium Price")
 coin_graphs = {
-    'bitcoin': make_graph("Bitcoin Price"),
-    'etherium': make_graph("Etherium Price")
+    #btc': make_graph("Bitcoin Price"),
+    #'eth': make_graph("Etherium Price")
+    0: make_graph("Bitcoin Price"),
+    1: make_graph("Etherium Price")
 }
 register_callbacks(app, coin_graphs)
 time_interval=1000 # in milliseconds
@@ -68,23 +68,26 @@ app.layout = html.Div(children=[
     html.H2(children="Zeppelin"),
     html.Div(children=f"Last commit: {last_updated()} UTC"),
     dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
-    dcc.Graph(id='bitcoin-graph', figure=coin_graphs['bitcoin']),
-    dcc.Graph(id='etherium-graph', figure=coin_graphs['etherium']),
+    dcc.Graph(id='btc-graph', figure=coin_graphs[0]),
+    dcc.Graph(id='eth-graph', figure=coin_graphs[1]),
     dcc.Interval(id='interval', interval=time_interval),
     html.H3(children='Logs'),
-    dcc.Textarea(id='logs', style={'width': '100%', 'height': '300px'}, readOnly=True)
+    dcc.Textarea(id='logs', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
+                'color': 'white'}, persistence=True, readOnly=True)
 ])    
 
 # Starts websocket connection and other asynchronous tasks with asyncio
 def async_tasks(loop):
-    # Array of exchanges to be connected to through websockets
-    # - New exchanges must be added to start_websocket(*) also
-    exchanges = ['binance']
+    # Array of urls to be connected to through websockets
+    # - New urls must be added to start_websocket(*) also
+    urls = [
+        'wss://testnet.binance.vision/ws/btcusdt@kline_1m',
+        'wss://testnet.binance.vision/ws/ethusdt@kline_1m'
+    ]
     # Creating asynchronous tasks to be run in the event loop
-    for x in exchanges:
+    for x in urls:
         loop.create_task(start_websocket(x))
     loop.run_forever()
-    #await asyncio.gather(*tasks)
 
 # Starts a new thread to run asyncio tasks
 # @return the newly created event loop

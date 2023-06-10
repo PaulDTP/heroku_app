@@ -30,10 +30,26 @@ api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 # Websocket base endpoint
 # wss = "wss://stream.binancefuture.com"
 # Base endpoint
-# base = 'https://testnet.binancefuture.com'
+# base = 'wss://testnet.binance.vision'
 # User data endpoint
 user_data = '' # find in binance API
 open_websockets = []
+
+# Starts websocket connections and calls appropriate processing function(s)
+async def start_websocket(url):
+    global open_websockets
+    try:
+        async with websockets.connect(url) as ws:
+            log_status('info', f"WebSocket connection for {url} opened")
+            open_websockets.append(ws)
+            while True:
+                #start_time = time.time()
+                data = await ws.recv()
+                #elapsed_time = time.time() - start_time
+                #print(f"Received data in {elapsed_time} seconds: {data}")
+                data_processing(data, url)
+    except websockets.exceptions.ConnectionClosedError:
+        log_status('info', "WebSocket connection closed")
 
 # Close all open websockets
 async def close_websockets(loop):
@@ -47,20 +63,3 @@ async def close_websockets(loop):
         else:
             open_websockets.remove(ws)
     log_status('info', "Done")
-
-# Starts websocket connections and calls appropriate processing function(s)
-async def start_websocket(type):
-    global open_websockets
-    try:
-        if type == 'binance':
-            async with websockets.connect('wss://testnet.binance.vision/ws/btcusdt@kline_1m') as ws:
-                log_status('info', "WebSocket connection opened")
-                open_websockets.append(ws)
-                while True:
-                    #start_time = time.time()
-                    data = await ws.recv()
-                    #elapsed_time = time.time() - start_time
-                    #print(f"Received data in {elapsed_time} seconds: {data}")
-                    data_processing(data)
-    except websockets.exceptions.ConnectionClosedError:
-        log_status('info', "WebSocket connection closed")        

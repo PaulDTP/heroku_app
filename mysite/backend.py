@@ -8,6 +8,7 @@ This file addresses all calculations and data processing needed for images and i
 import os
 import time
 import datetime
+import subprocess
 
 import pandas as pd
 import numpy as np
@@ -23,8 +24,11 @@ from logger import log_status
 
 max_queue_size = 1000
 # X and Y axis data using deque for automatic resizing - check space
-timestamps = deque(maxlen=max_queue_size)
-prices = defaultdict(lambda: deque(maxlen=max_queue_size))
+btc_timestamps = deque(maxlen=max_queue_size)
+btc_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
+
+eth_timestamps = deque(maxlen=max_queue_size)
+eth_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
 # Dictionary definition
 #prices = {'open':[], 'high':[], 'low':[], 'close':[]}
 
@@ -38,10 +42,17 @@ def last_updated():
         # Remote path
         repo = git.Repo("~/z-algo").head.commit
     return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))'''
-    return "Jun 6 1:33am EST"
+    commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cd'])
+    return commit_date.decode('utf-8').strip()
 
-def get_time_price():
-    return timestamps, prices
+# @return coin data requested by name in the argument
+def get_time_price(coin):
+    #if coin=='btc':
+    if coin==0:
+        return btc_timestamps, btc_prices
+    #if coin=='eth':
+    if coin==1:
+        return eth_timestamps, eth_prices
 
 #@return a timestamp converted to a human readable format
 def time_conv(timestamp):
@@ -49,24 +60,36 @@ def time_conv(timestamp):
 
 # Takes data from on_message(ws, message) to process data for the dashboard graph
 # @return the graph created from parsing the json response file
-def data_processing(message):
-    log_status('debug', 'Data received.')
+def data_processing(message, url):
+    log_status('info', 'Data received.')
     data = json.loads(message)
 
-    # When receiving kline data:
-    timestamp = time_conv(data['E'])
-    timestamps.append(timestamp)
-    data = data['k']
-    prices['open'].append(float(data['o']))
-    prices['high'].append(float(data['h']))
-    prices['low'].append(float(data['l']))
-    prices['close'].append(float(data['c']))
+    if 'btc' in url:
+        # When receiving kline data:
+        timestamp = time_conv(data['E'])
+        btc_timestamps.append(timestamp)
+        data = data['k']
+        btc_prices['open'].append(float(data['o']))
+        btc_prices['high'].append(float(data['h']))
+        btc_prices['low'].append(float(data['l']))
+        btc_prices['close'].append(float(data['c']))
+    elif 'eth' in url:
+        # When receiving kline data:
+        timestamp = time_conv(data['E'])
+        eth_timestamps.append(timestamp)
+        data = data['k']
+        eth_prices['open'].append(float(data['o']))
+        eth_prices['high'].append(float(data['h']))
+        eth_prices['low'].append(float(data['l']))
+        eth_prices['close'].append(float(data['c']))
 
     # Other data types:
     '''
     #TODO
     '''
 
+# Creates a blank graph ready for data
+# @return the initial graph 
 def make_graph(title):
     fig = go.Figure()
     fig.add_trace(go.Candlestick())
@@ -83,5 +106,6 @@ def make_graph(title):
     )
     return fig
 
+# Updates data
 def update_data(fig):
     return fig

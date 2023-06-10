@@ -30,12 +30,11 @@ log_handler = logging.StreamHandler()
 memory_handler = logging.handlers.MemoryHandler(capacity=100, target=log_handler)
 file_handler = logging.FileHandler('app.log')
 
+# Creating logger and adding handlers
 zep_log = logging.getLogger('Zeppelin')
 zep_log.addHandler(memory_handler)
 zep_log.addHandler(log_handler)
 zep_log.addHandler(file_handler)
-
-
 
 # Creating formatter from the basicConfig formatting
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
