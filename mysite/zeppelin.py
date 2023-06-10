@@ -12,9 +12,9 @@ This file handles the display of the Zeppelin web-app.
 - Zeppelin currently uses Binance for price data and account info
 '''
 import asyncio
+import threading
 
 from dash import dash, html, dcc
-import threading
 
 from backend import make_graph, last_updated
 from callback_updates import register_callbacks
