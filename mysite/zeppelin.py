@@ -23,36 +23,6 @@ from websocket_streams import start_websocket, close_websockets
 app = dash.Dash(__name__)
 server = app.server
 
-# Google Analytics tag
-app.index_string = '''
-<!DOCTYPE html>
-<html>
-    <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WMWKTVG0WM"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-WMWKTVG0WM');
-        </script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>
-'''
-
 # Retrieving components for Zeppelin
 coin_graphs = {
     #btc': make_graph("Bitcoin Price"),
