@@ -23,14 +23,12 @@ import plotly.express as px
 from logger import log_status
 
 max_queue_size = 1000
+
 # X and Y axis data using deque for automatic resizing - check space
 btc_timestamps = deque(maxlen=max_queue_size)
 btc_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
-
 eth_timestamps = deque(maxlen=max_queue_size)
 eth_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
-# Dictionary definition
-#prices = {'open':[], 'high':[], 'low':[], 'close':[]}
 
 # Gives the last update from git commit
 # @return a human readable string of when the last ~/z-algo git commit occurred
@@ -64,24 +62,35 @@ def data_processing(message, url):
     log_status('info', 'Data received.')
     data = json.loads(message)
 
-    if 'btc' in url:
-        # When receiving kline data:
-        timestamp = time_conv(data['E'])
+    symbol = data['s']
+    event = data['e']
+    timestamp = time_conv(data['E'])
+
+    if symbol == 'BTCUSDT':
         btc_timestamps.append(timestamp)
-        data = data['k']
-        btc_prices['open'].append(float(data['o']))
-        btc_prices['high'].append(float(data['h']))
-        btc_prices['low'].append(float(data['l']))
-        btc_prices['close'].append(float(data['c']))
-    elif 'eth' in url:
-        # When receiving kline data:
-        timestamp = time_conv(data['E'])
+        if event == '24hrTicker':
+            btc_prices['current'].append(float(data['c']))
+        elif event == 'trade':
+            btc_prices['current'].append(float(data['p']))
+        elif event == 'kline':
+            # When receiving kline data:
+            data = data['k']
+            btc_prices['open'].append(float(data['o']))
+            btc_prices['high'].append(float(data['h']))
+            btc_prices['low'].append(float(data['l']))
+            btc_prices['close'].append(float(data['c']))
+    elif symbol == 'ETHUSDT':
         eth_timestamps.append(timestamp)
-        data = data['k']
-        eth_prices['open'].append(float(data['o']))
-        eth_prices['high'].append(float(data['h']))
-        eth_prices['low'].append(float(data['l']))
-        eth_prices['close'].append(float(data['c']))
+        if event == '24hrTicker':
+            eth_prices['current'].append(float(data['c']))
+        elif event == 'trade':
+            eth_prices['current'].append(float(data['p']))
+        elif event == 'kline':
+            data = data['k']
+            eth_prices['open'].append(float(data['o']))
+            eth_prices['high'].append(float(data['h']))
+            eth_prices['low'].append(float(data['l']))
+            eth_prices['close'].append(float(data['c']))
 
     # Other data types:
     '''
@@ -92,7 +101,8 @@ def data_processing(message, url):
 # @return the initial graph 
 def make_graph(title):
     fig = go.Figure()
-    fig.add_trace(go.Candlestick())
+    fig.add_trace(go.Candlestick(name='main'))
+    fig.add_trace(go.Scatter(name='aux', mode='lines'))
     fig.update_layout(
         title=title,
         showlegend=False,

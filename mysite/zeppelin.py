@@ -42,7 +42,7 @@ app.layout = html.Div(children=[
     dcc.Graph(id='eth-graph', figure=coin_graphs[1]),
     dcc.Interval(id='interval', interval=time_interval),
     html.H3(children='Logs'),
-    dcc.Textarea(id='logs', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
+    dcc.Textarea(id='logging', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
                 'color': 'white'}, persistence=True, readOnly=True)
 ])    
 
@@ -51,8 +51,8 @@ def async_tasks(loop):
     # Array of urls to be connected to through websockets
     # - New urls must be added to start_websocket(*) also
     urls = [
-        'wss://testnet.binance.vision/ws/btcusdt@kline_1m',
-        'wss://testnet.binance.vision/ws/ethusdt@kline_1m'
+        'wss://testnet.binance.vision/ws/btcusdt@trade',
+        'wss://testnet.binance.vision/ws/ethusdt@trade'
     ]
     # Creating asynchronous tasks to be run in the event loop
     for x in urls:

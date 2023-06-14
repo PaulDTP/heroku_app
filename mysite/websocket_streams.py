@@ -1,7 +1,7 @@
 '''
 Authored by Isaiah Terrell-Perica
 05/31/2023
-This file handles all websocket connections and data, calling inherited functions for processing.
+This file handles all websocket connections and the resulting data, calling inherited functions for processing.
 '''
 import asyncio
 import time

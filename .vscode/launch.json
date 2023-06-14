@@ -5,7 +5,7 @@
         "name": "Python: Debug",
         "type": "python",
         "request": "launch",
-        "module": "${workspaceFolder}/mysite/zeppelin.py",
+        "module": "${workspaceFolder}/mysite/zeppelin",
         "console": "integratedTerminal",
         "env": {
           "DEBUGPY_LAUNCHER_PORT": "8050"
