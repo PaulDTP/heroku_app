@@ -73,7 +73,7 @@ def start_thread():
 if __name__ == '__main__':
     loop = start_thread()
     try:
-        app.run_server(debug=True)
+        app.run_server(debug=False)
     finally:
         loop.call_soon_threadsafe(loop.create_task, close_websockets(loop))
         loop.stop()
