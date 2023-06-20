@@ -27,6 +27,8 @@ server = app.server
 coin_graphs = {
     #btc': make_graph("Bitcoin Price"),
     #'eth': make_graph("Etherium Price")
+
+    # Function creates an empty fig object for each coin's graph
     0: make_graph("Bitcoin Price"),
     1: make_graph("Etherium Price")
 }

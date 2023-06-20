@@ -24,7 +24,7 @@ from logger import log_status
 
 max_queue_size = 1000
 
-# X and Y axis data using deque for automatic resizing - check space
+# X and Y axis data using deque for automatic resizing - check space usage
 btc_timestamps = deque(maxlen=max_queue_size)
 btc_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
 eth_timestamps = deque(maxlen=max_queue_size)
@@ -46,10 +46,10 @@ def last_updated():
 # @return coin data requested by name in the argument
 def get_time_price(coin):
     #if coin=='btc':
-    if coin==0:
+    if coin==0 or coin =='btc':
         return btc_timestamps, btc_prices
     #if coin=='eth':
-    if coin==1:
+    if coin==1 or coin == 'eth':
         return eth_timestamps, eth_prices
 
 #@return a timestamp converted to a human readable format
@@ -66,6 +66,7 @@ def data_processing(message, url):
     event = data['e']
     timestamp = time_conv(data['E'])
 
+    # Bitcoin Websocket Handling     
     if symbol == 'BTCUSDT':
         btc_timestamps.append(timestamp)
         if event == '24hrTicker':
@@ -79,6 +80,7 @@ def data_processing(message, url):
             btc_prices['high'].append(float(data['h']))
             btc_prices['low'].append(float(data['l']))
             btc_prices['close'].append(float(data['c']))
+    # Etherium Websocket Handling     
     elif symbol == 'ETHUSDT':
         eth_timestamps.append(timestamp)
         if event == '24hrTicker':
