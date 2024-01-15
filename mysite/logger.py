@@ -20,6 +20,7 @@ import sys
 
 # Setting default configuration for All loggers
 logging.basicConfig(
+    # formatse each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
     format='%(asctime)s - %(levelname)s - %(message)s',
     level=logging.INFO,
     stream=sys.stdout
@@ -48,7 +49,7 @@ def get_logs():
     records = memory_handler.buffer.copy()
     return [x.getMessage() for x in records]
 
-# Creates a log message with severity and message
+# Creates a custom log message with severity and message
 def log_status(severity, message):
     if severity == 'debug':
         zep_log.debug(message)
