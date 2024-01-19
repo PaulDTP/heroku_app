@@ -7,53 +7,34 @@ This file handles all calculations and data processing needed for coin graphs an
 - May need to separate processing for data or conversions
 - Should test time taken to run functions
 '''
-import os
-import time
 import datetime
 import subprocess
-import multiprocessing
 
-import pandas as pd
-import numpy as np
 import json
-import git
-from collections import defaultdict, deque
-from dash import dash
-from dash.dependencies import Input, Output
 import plotly.graph_objs as go
-import plotly.express as px
 
 from logger import log_status
 
-
 max_queue_size = 1000
 
-# X and Y axis data using deque for automatic resizing - check space usage
-btc_timestamps = deque(maxlen=max_queue_size)
-btc_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
-eth_timestamps = deque(maxlen=max_queue_size)
-eth_prices = defaultdict(lambda: deque(maxlen=max_queue_size))
+btc_timestamps = None
+btc_prices = None
+eth_timestamps = None
+eth_prices = None
+
 
 # Returns the last update from git commit
-# @return a human readable string of when the last ~/z-algo git commit occurred
+# @return a human-readable string of when the last ~/z-algo git commit occurred
 def last_updated():
-    # Uncomment if running Zeppelin locally
-    '''if os.environ.get("LOGNAME") == "isaiahtp":
-        # Local path
-        repo = git.Repo("~/Desktop/Zeppelin/z-algo").head.commit
-    else:
-        # Remote path
-        repo = git.Repo("~/z-algo").head.commit
-    return time.strftime("%a, %d %b %Y %H:%M", time.gmtime(repo.committed_date))'''
-    # Uncomment if running remotely
     commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cd'])
     return commit_date.decode('utf-8').strip()
+
 
 # Creates a blank graph ready for data
 # @return the initial graph 
 def make_graph(title):
     fig = go.Figure()
-    #fig.add_trace(go.Candlestick(name='main'))
+    # fig.add_trace(go.Candlestick(name='main'))
     fig.add_trace(go.Scatter(name='main', mode='lines'))
     fig.update_layout(
         title=title,
@@ -63,44 +44,46 @@ def make_graph(title):
             tickformat="%H:%M:%S %Y-%m-%d"  # Customizing date format
         ),
         yaxis=dict(
-            tickformat=".2f", # Precision of y labels
+            tickformat=".2f",  # Precision of y labels
         ),
-        uirevision=True
+        uirevision=True # maintains user state
     )
     return fig
 
+
 # @return coin data requested from argument
 def get_time_price(coin):
-    #if coin=='btc':
-    if coin==0 or coin =='btc':
+    if coin == 0 or coin == 'btc':
         return btc_timestamps, btc_prices
-    #if coin=='eth':
-    if coin==1 or coin == 'eth':
+    if coin == 1 or coin == 'eth':
         return eth_timestamps, eth_prices
 
-#@return a timestamp converted to a human readable format
+
+# @return a timestamp converted to a human-readable format
 def time_conv(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp/ 1000).strftime('%H:%M:%S.%f')[:-4]
-    #.strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]
+    return datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%H:%M:%S.%f')[:-4]
+    # .strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]
 
-def data_processing(shared_queue, exit_event):
+
+def data_processing(shared_queue, exit_event, btimestamp, bprices, etimestamps, eprices):
     global btc_timestamps, btc_prices, eth_timestamps, eth_prices
-    log_status("info", "IN funct")
-    print(exit_event.is_set())
-    while not exit_event.is_set():
-        msg = shared_queue.get()
-        data = json.loads(msg)
-        log_status("info", "passed")
-        log_status("info" , f"{msg}")
-        log_status("info", f"{data}")
-        symbol = data['s'] # Symbol (ex: BNBBTC)
-        event = data['e'] # Event type (kline, aggtrade, etc)
-        timestamp = time_conv(data['E']) # Event time ex: 1672515782136
+    btc_timestamps = btimestamp
+    btc_prices = bprices
+    eth_timestamps = etimestamps
+    eth_prices = eprices
 
+
+    while not exit_event.is_set():
+        print("processing")
+        msg = shared_queue.get(block=True)
+        data = json.loads(msg)
+        symbol = data['s']  # Symbol (ex: BNBBTC)
+        event = data['e']  # Event type (kline, aggtrade, etc)
+        timestamp = time_conv(data['E'])  # Event time ex: 1672515782136
         # Bitcoin Websocket Handling     
         if symbol == 'BTCUSDT':
-            if timestamp not in btc_timestamps:
-                btc_timestamps.append(timestamp)
+            # if timestamp not in btc_timestamps:
+            btc_timestamps.append(timestamp)
             # Rolling window ticker stats (percent change, volume)
             if event == '24hrTicker':
                 btc_prices['current'].append(float(data['c']))
@@ -132,12 +115,6 @@ def data_processing(shared_queue, exit_event):
         '''
         #TODO
         '''
-
-
-
-
-
-
 
 
 # Takes data from on_message(ws, message) to process data for the dashboard graph
@@ -183,7 +160,7 @@ def data_processing(shared_queue, exit_event):
             eth_prices['close'].append(float(data['c']))
     data_lock.release()
 '''
-### Payload Types   
+# Payload Types
 '''
 Trade Stream Payload
 Update Speed: Real-time
