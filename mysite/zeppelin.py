@@ -49,6 +49,8 @@ register_callbacks(app, coin_graphs)
 if __name__ == '__main__':
     try:
         start_backend()
-        app.run_server(debug=False)
+        app.run_server(debug=False, threaded = False)
     finally:
         end_backend()
+
+# postgres://zeppelin_user:taTZucupmhMbnEYXFZOHUkIXMFkSKEh9@dpg-cmlb7h6g1b2c73futgm0-a/zeppelin

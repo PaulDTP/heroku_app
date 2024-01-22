@@ -13,6 +13,7 @@ from logger import get_logs, log_status
 
 NUM_COINS = 2
 
+
 # Updates a fig graph depending on the coin type
 def update(fig, coin):
     timestamps, prices = get_time_price(coin)
@@ -45,7 +46,7 @@ def update(fig, coin):
     fig.update_traces(
         x=time_axis,
         y=current_price,
-        selector=dict(name="main") # will be aux
+        selector=dict(name="main")  # will be aux
     )
     return fig
 
@@ -56,7 +57,7 @@ def register_callbacks(app, coin_graphs):
     # @return the output for all graphs on the main page for Zeppelin
     @app.callback(
         [Output('btc-graph', 'figure'),
-            Output('logging', 'value')],
+         Output('logging', 'value')],
         [Input('interval', 'n_intervals')]
     )
     def updates(_):
@@ -72,6 +73,7 @@ def register_callbacks(app, coin_graphs):
         Output('logs', 'value'),
         Input('interval', 'n_intervals')
     )'''
+
     def download(_):
         logs = get_logs()
         return '\n'.join(logs)

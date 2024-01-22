@@ -45,7 +45,7 @@ async def open_websocket(url, event, shared_queue):
                 start_time = time.time()
                 data = await ws.recv()
                 # storing data in shared data struct
-                shared_queue.put(data)
+                shared_queue.put(data) # SEND data to database here
                 time_processed.append(time.time() - start_time)
                 log_status('debug', f'{time_processed}')
     except Exception as e:

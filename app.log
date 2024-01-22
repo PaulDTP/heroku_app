@@ -1603,3 +1603,156 @@
 2024-01-11 10:42:35,961 - INFO - IN funct
 2024-01-11 10:42:36,851 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
 2024-01-11 10:42:36,857 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/ethusdt@trade opened
+2024-01-18 11:14:32,221 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:14:32,392 - INFO - IN funct
+2024-01-18 11:14:32,392 - INFO - passed
+2024-01-18 11:14:32,392 - INFO - {"e":"trade","E":1705605272230,"s":"BTCUSDT","t":1712254,"p":"41381.63000000","q":"0.00750000","b":6230837,"a":6230834,"T":1705605272229,"m":false,"M":true}
+2024-01-18 11:14:32,392 - INFO - {'e': 'trade', 'E': 1705605272230, 's': 'BTCUSDT', 't': 1712254, 'p': '41381.63000000', 'q': '0.00750000', 'b': 6230837, 'a': 6230834, 'T': 1705605272229, 'm': False, 'M': True}
+2024-01-18 11:14:33,176 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:14:33,296 - INFO - IN funct
+2024-01-18 11:14:33,452 - INFO - passed
+2024-01-18 11:14:33,452 - INFO - {"e":"trade","E":1705605273322,"s":"BTCUSDT","t":1712257,"p":"41383.50000000","q":"0.00919000","b":6230849,"a":6230836,"T":1705605273321,"m":false,"M":true}
+2024-01-18 11:14:33,452 - INFO - {'e': 'trade', 'E': 1705605273322, 's': 'BTCUSDT', 't': 1712257, 'p': '41383.50000000', 'q': '0.00919000', 'b': 6230849, 'a': 6230836, 'T': 1705605273321, 'm': False, 'M': True}
+2024-01-18 11:19:04,148 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:19:04,472 - INFO - IN funct
+2024-01-18 11:19:04,472 - INFO - passed
+2024-01-18 11:19:04,473 - INFO - {"e":"trade","E":1705605544199,"s":"BTCUSDT","t":1713262,"p":"41500.01000000","q":"0.01000000","b":6233134,"a":6233124,"T":1705605544199,"m":false,"M":true}
+2024-01-18 11:19:04,473 - INFO - {'e': 'trade', 'E': 1705605544199, 's': 'BTCUSDT', 't': 1713262, 'p': '41500.01000000', 'q': '0.01000000', 'b': 6233134, 'a': 6233124, 'T': 1705605544199, 'm': False, 'M': True}
+2024-01-18 11:19:05,330 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:19:05,386 - INFO - IN funct
+2024-01-18 11:19:05,604 - INFO - passed
+2024-01-18 11:19:05,604 - INFO - {"e":"trade","E":1705605545515,"s":"BTCUSDT","t":1713263,"p":"41500.01000000","q":"0.00759000","b":6233135,"a":6233127,"T":1705605545515,"m":false,"M":true}
+2024-01-18 11:19:05,604 - INFO - {'e': 'trade', 'E': 1705605545515, 's': 'BTCUSDT', 't': 1713263, 'p': '41500.01000000', 'q': '0.00759000', 'b': 6233135, 'a': 6233127, 'T': 1705605545515, 'm': False, 'M': True}
+2024-01-18 11:20:32,196 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:20:32,479 - INFO - IN funct
+2024-01-18 11:20:33,261 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:20:33,297 - INFO - IN funct
+2024-01-18 11:20:33,832 - INFO - passed
+2024-01-18 11:20:33,832 - INFO - passed
+2024-01-18 11:20:33,833 - INFO - {"e":"trade","E":1705605633743,"s":"BTCUSDT","t":1713572,"p":"41530.84000000","q":"0.00204000","b":6234022,"a":6233989,"T":1705605633742,"m":false,"M":true}
+2024-01-18 11:20:33,833 - INFO - {"e":"trade","E":1705605633743,"s":"BTCUSDT","t":1713572,"p":"41530.84000000","q":"0.00204000","b":6234022,"a":6233989,"T":1705605633742,"m":false,"M":true}
+2024-01-18 11:20:33,833 - INFO - {'e': 'trade', 'E': 1705605633743, 's': 'BTCUSDT', 't': 1713572, 'p': '41530.84000000', 'q': '0.00204000', 'b': 6234022, 'a': 6233989, 'T': 1705605633742, 'm': False, 'M': True}
+2024-01-18 11:20:33,833 - INFO - {'e': 'trade', 'E': 1705605633743, 's': 'BTCUSDT', 't': 1713572, 'p': '41530.84000000', 'q': '0.00204000', 'b': 6234022, 'a': 6233989, 'T': 1705605633742, 'm': False, 'M': True}
+2024-01-18 11:52:22,276 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:52:22,876 - INFO - IN funct
+2024-01-18 11:52:23,301 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:52:23,790 - INFO - passed
+2024-01-18 11:52:23,790 - INFO - {"e":"trade","E":1705607543745,"s":"BTCUSDT","t":1719139,"p":"41285.99000000","q":"0.01000000","b":6248987,"a":6249014,"T":1705607543745,"m":true,"M":true}
+2024-01-18 11:52:23,791 - INFO - {'e': 'trade', 'E': 1705607543745, 's': 'BTCUSDT', 't': 1719139, 'p': '41285.99000000', 'q': '0.01000000', 'b': 6248987, 'a': 6249014, 'T': 1705607543745, 'm': True, 'M': True}
+2024-01-18 11:52:23,798 - INFO - IN funct
+2024-01-18 11:52:23,799 - INFO - passed
+2024-01-18 11:52:23,799 - INFO - {"e":"trade","E":1705607543745,"s":"BTCUSDT","t":1719139,"p":"41285.99000000","q":"0.01000000","b":6248987,"a":6249014,"T":1705607543745,"m":true,"M":true}
+2024-01-18 11:52:23,799 - INFO - {'e': 'trade', 'E': 1705607543745, 's': 'BTCUSDT', 't': 1719139, 'p': '41285.99000000', 'q': '0.01000000', 'b': 6248987, 'a': 6249014, 'T': 1705607543745, 'm': True, 'M': True}
+2024-01-18 11:53:02,030 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:53:02,739 - INFO - IN funct
+2024-01-18 11:53:02,739 - INFO - passed
+2024-01-18 11:53:02,739 - INFO - {"e":"trade","E":1705607582183,"s":"BTCUSDT","t":1719247,"p":"41322.47000000","q":"0.00654000","b":6249187,"a":6249256,"T":1705607582182,"m":true,"M":true}
+2024-01-18 11:53:02,739 - INFO - {'e': 'trade', 'E': 1705607582183, 's': 'BTCUSDT', 't': 1719247, 'p': '41322.47000000', 'q': '0.00654000', 'b': 6249187, 'a': 6249256, 'T': 1705607582182, 'm': True, 'M': True}
+2024-01-18 11:53:02,740 - INFO - passed
+2024-01-18 11:53:02,740 - INFO - {"e":"trade","E":1705607582266,"s":"BTCUSDT","t":1719248,"p":"41322.62000000","q":"0.00017000","b":6249259,"a":6249242,"T":1705607582266,"m":false,"M":true}
+2024-01-18 11:53:02,740 - INFO - {'e': 'trade', 'E': 1705607582266, 's': 'BTCUSDT', 't': 1719248, 'p': '41322.62000000', 'q': '0.00017000', 'b': 6249259, 'a': 6249242, 'T': 1705607582266, 'm': False, 'M': True}
+2024-01-18 11:53:02,740 - INFO - passed
+2024-01-18 11:53:02,740 - INFO - {"e":"trade","E":1705607582266,"s":"BTCUSDT","t":1719249,"p":"41323.42000000","q":"0.00983000","b":6249259,"a":6249243,"T":1705607582266,"m":false,"M":true}
+2024-01-18 11:53:02,740 - INFO - {'e': 'trade', 'E': 1705607582266, 's': 'BTCUSDT', 't': 1719249, 'p': '41323.42000000', 'q': '0.00983000', 'b': 6249259, 'a': 6249243, 'T': 1705607582266, 'm': False, 'M': True}
+2024-01-18 11:53:03,113 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:53:03,131 - INFO - passed
+2024-01-18 11:53:03,132 - INFO - {"e":"trade","E":1705607583082,"s":"BTCUSDT","t":1719250,"p":"41322.47000000","q":"0.00472000","b":6249187,"a":6249265,"T":1705607583081,"m":true,"M":true}
+2024-01-18 11:53:03,132 - INFO - {'e': 'trade', 'E': 1705607583082, 's': 'BTCUSDT', 't': 1719250, 'p': '41322.47000000', 'q': '0.00472000', 'b': 6249187, 'a': 6249265, 'T': 1705607583081, 'm': True, 'M': True}
+2024-01-18 11:53:03,132 - INFO - passed
+2024-01-18 11:53:03,132 - INFO - {"e":"trade","E":1705607583082,"s":"BTCUSDT","t":1719251,"p":"41322.47000000","q":"0.00533000","b":6249257,"a":6249265,"T":1705607583081,"m":true,"M":true}
+2024-01-18 11:53:03,135 - INFO - {'e': 'trade', 'E': 1705607583082, 's': 'BTCUSDT', 't': 1719251, 'p': '41322.47000000', 'q': '0.00533000', 'b': 6249257, 'a': 6249265, 'T': 1705607583081, 'm': True, 'M': True}
+2024-01-18 11:53:03,137 - INFO - passed
+2024-01-18 11:53:03,137 - INFO - {"e":"trade","E":1705607583088,"s":"BTCUSDT","t":1719252,"p":"41322.47000000","q":"0.00467000","b":6249257,"a":6249266,"T":1705607583088,"m":true,"M":true}
+2024-01-18 11:53:03,137 - INFO - {'e': 'trade', 'E': 1705607583088, 's': 'BTCUSDT', 't': 1719252, 'p': '41322.47000000', 'q': '0.00467000', 'b': 6249257, 'a': 6249266, 'T': 1705607583088, 'm': True, 'M': True}
+2024-01-18 11:53:03,137 - INFO - passed
+2024-01-18 11:53:03,137 - INFO - {"e":"trade","E":1705607583088,"s":"BTCUSDT","t":1719253,"p":"41322.15000000","q":"0.00139000","b":6249194,"a":6249266,"T":1705607583088,"m":true,"M":true}
+2024-01-18 11:53:03,141 - INFO - {'e': 'trade', 'E': 1705607583088, 's': 'BTCUSDT', 't': 1719253, 'p': '41322.15000000', 'q': '0.00139000', 'b': 6249194, 'a': 6249266, 'T': 1705607583088, 'm': True, 'M': True}
+2024-01-18 11:53:03,160 - INFO - passed
+2024-01-18 11:53:03,164 - INFO - {"e":"trade","E":1705607583111,"s":"BTCUSDT","t":1719254,"p":"41322.15000000","q":"0.00690000","b":6249194,"a":6249267,"T":1705607583110,"m":true,"M":true}
+2024-01-18 11:53:03,164 - INFO - {'e': 'trade', 'E': 1705607583111, 's': 'BTCUSDT', 't': 1719254, 'p': '41322.15000000', 'q': '0.00690000', 'b': 6249194, 'a': 6249267, 'T': 1705607583110, 'm': True, 'M': True}
+2024-01-18 11:53:03,279 - INFO - passed
+2024-01-18 11:53:03,279 - INFO - {"e":"trade","E":1705607583234,"s":"BTCUSDT","t":1719255,"p":"41322.62000000","q":"0.01000000","b":6249268,"a":6249260,"T":1705607583234,"m":false,"M":true}
+2024-01-18 11:53:03,279 - INFO - {'e': 'trade', 'E': 1705607583234, 's': 'BTCUSDT', 't': 1719255, 'p': '41322.62000000', 'q': '0.01000000', 'b': 6249268, 'a': 6249260, 'T': 1705607583234, 'm': False, 'M': True}
+2024-01-18 11:53:03,677 - INFO - IN funct
+2024-01-18 11:53:03,677 - INFO - passed
+2024-01-18 11:53:03,677 - INFO - {"e":"trade","E":1705607583088,"s":"BTCUSDT","t":1719252,"p":"41322.47000000","q":"0.00467000","b":6249257,"a":6249266,"T":1705607583088,"m":true,"M":true}
+2024-01-18 11:53:03,677 - INFO - {'e': 'trade', 'E': 1705607583088, 's': 'BTCUSDT', 't': 1719252, 'p': '41322.47000000', 'q': '0.00467000', 'b': 6249257, 'a': 6249266, 'T': 1705607583088, 'm': True, 'M': True}
+2024-01-18 11:53:03,677 - INFO - passed
+2024-01-18 11:53:03,677 - INFO - {"e":"trade","E":1705607583088,"s":"BTCUSDT","t":1719253,"p":"41322.15000000","q":"0.00139000","b":6249194,"a":6249266,"T":1705607583088,"m":true,"M":true}
+2024-01-18 11:53:03,677 - INFO - {'e': 'trade', 'E': 1705607583088, 's': 'BTCUSDT', 't': 1719253, 'p': '41322.15000000', 'q': '0.00139000', 'b': 6249194, 'a': 6249266, 'T': 1705607583088, 'm': True, 'M': True}
+2024-01-18 11:53:03,677 - INFO - passed
+2024-01-18 11:53:03,677 - INFO - {"e":"trade","E":1705607583111,"s":"BTCUSDT","t":1719254,"p":"41322.15000000","q":"0.00690000","b":6249194,"a":6249267,"T":1705607583110,"m":true,"M":true}
+2024-01-18 11:53:03,677 - INFO - {'e': 'trade', 'E': 1705607583111, 's': 'BTCUSDT', 't': 1719254, 'p': '41322.15000000', 'q': '0.00690000', 'b': 6249194, 'a': 6249267, 'T': 1705607583110, 'm': True, 'M': True}
+2024-01-18 11:53:03,677 - INFO - passed
+2024-01-18 11:53:03,677 - INFO - {"e":"trade","E":1705607583234,"s":"BTCUSDT","t":1719255,"p":"41322.62000000","q":"0.01000000","b":6249268,"a":6249260,"T":1705607583234,"m":false,"M":true}
+2024-01-18 11:53:03,677 - INFO - {'e': 'trade', 'E': 1705607583234, 's': 'BTCUSDT', 't': 1719255, 'p': '41322.62000000', 'q': '0.01000000', 'b': 6249268, 'a': 6249260, 'T': 1705607583234, 'm': False, 'M': True}
+2024-01-18 11:53:04,566 - INFO - passed
+2024-01-18 11:53:04,566 - INFO - {"e":"trade","E":1705607584520,"s":"BTCUSDT","t":1719256,"p":"41322.15000000","q":"0.00369000","b":6249194,"a":6249272,"T":1705607584519,"m":true,"M":true}
+2024-01-18 11:53:04,566 - INFO - passed
+2024-01-18 11:53:04,567 - INFO - {'e': 'trade', 'E': 1705607584520, 's': 'BTCUSDT', 't': 1719256, 'p': '41322.15000000', 'q': '0.00369000', 'b': 6249194, 'a': 6249272, 'T': 1705607584519, 'm': True, 'M': True}
+2024-01-18 11:53:04,567 - INFO - {"e":"trade","E":1705607584520,"s":"BTCUSDT","t":1719256,"p":"41322.15000000","q":"0.00369000","b":6249194,"a":6249272,"T":1705607584519,"m":true,"M":true}
+2024-01-18 11:53:04,567 - INFO - passed
+2024-01-18 11:53:04,567 - INFO - {'e': 'trade', 'E': 1705607584520, 's': 'BTCUSDT', 't': 1719256, 'p': '41322.15000000', 'q': '0.00369000', 'b': 6249194, 'a': 6249272, 'T': 1705607584519, 'm': True, 'M': True}
+2024-01-18 11:53:04,567 - INFO - {"e":"trade","E":1705607584520,"s":"BTCUSDT","t":1719257,"p":"41321.86000000","q":"0.00346000","b":6249160,"a":6249272,"T":1705607584519,"m":true,"M":true}
+2024-01-18 11:53:04,567 - INFO - passed
+2024-01-18 11:53:04,567 - INFO - {'e': 'trade', 'E': 1705607584520, 's': 'BTCUSDT', 't': 1719257, 'p': '41321.86000000', 'q': '0.00346000', 'b': 6249160, 'a': 6249272, 'T': 1705607584519, 'm': True, 'M': True}
+2024-01-18 11:53:04,567 - INFO - {"e":"trade","E":1705607584520,"s":"BTCUSDT","t":1719257,"p":"41321.86000000","q":"0.00346000","b":6249160,"a":6249272,"T":1705607584519,"m":true,"M":true}
+2024-01-18 11:53:04,568 - INFO - {'e': 'trade', 'E': 1705607584520, 's': 'BTCUSDT', 't': 1719257, 'p': '41321.86000000', 'q': '0.00346000', 'b': 6249160, 'a': 6249272, 'T': 1705607584519, 'm': True, 'M': True}
+2024-01-18 11:53:06,412 - INFO - passed
+2024-01-18 11:53:06,412 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719258,"p":"41321.86000000","q":"0.00201000","b":6249160,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,412 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719258, 'p': '41321.86000000', 'q': '0.00201000', 'b': 6249160, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,412 - INFO - passed
+2024-01-18 11:53:06,412 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719259,"p":"41318.50000000","q":"0.00300000","b":6249249,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,412 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719259, 'p': '41318.50000000', 'q': '0.00300000', 'b': 6249249, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,414 - INFO - passed
+2024-01-18 11:53:06,414 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719260,"p":"41314.01000000","q":"0.00419000","b":6249113,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,414 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719260, 'p': '41314.01000000', 'q': '0.00419000', 'b': 6249113, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,414 - INFO - passed
+2024-01-18 11:53:06,414 - INFO - passed
+2024-01-18 11:53:06,414 - INFO - {"e":"trade","E":1705607586328,"s":"BTCUSDT","t":1719261,"p":"41314.01000000","q":"0.00332000","b":6249113,"a":6249278,"T":1705607586328,"m":true,"M":true}
+2024-01-18 11:53:06,414 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719258,"p":"41321.86000000","q":"0.00201000","b":6249160,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,414 - INFO - {'e': 'trade', 'E': 1705607586328, 's': 'BTCUSDT', 't': 1719261, 'p': '41314.01000000', 'q': '0.00332000', 'b': 6249113, 'a': 6249278, 'T': 1705607586328, 'm': True, 'M': True}
+2024-01-18 11:53:06,414 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719258, 'p': '41321.86000000', 'q': '0.00201000', 'b': 6249160, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,414 - INFO - passed
+2024-01-18 11:53:06,414 - INFO - {"e":"trade","E":1705607586328,"s":"BTCUSDT","t":1719262,"p":"41313.04000000","q":"0.00467000","b":6249139,"a":6249278,"T":1705607586328,"m":true,"M":true}
+2024-01-18 11:53:06,414 - INFO - passed
+2024-01-18 11:53:06,414 - INFO - {'e': 'trade', 'E': 1705607586328, 's': 'BTCUSDT', 't': 1719262, 'p': '41313.04000000', 'q': '0.00467000', 'b': 6249139, 'a': 6249278, 'T': 1705607586328, 'm': True, 'M': True}
+2024-01-18 11:53:06,414 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719259,"p":"41318.50000000","q":"0.00300000","b":6249249,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,414 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719259, 'p': '41318.50000000', 'q': '0.00300000', 'b': 6249249, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,415 - INFO - passed
+2024-01-18 11:53:06,415 - INFO - {"e":"trade","E":1705607586315,"s":"BTCUSDT","t":1719260,"p":"41314.01000000","q":"0.00419000","b":6249113,"a":6249276,"T":1705607586314,"m":true,"M":true}
+2024-01-18 11:53:06,415 - INFO - {'e': 'trade', 'E': 1705607586315, 's': 'BTCUSDT', 't': 1719260, 'p': '41314.01000000', 'q': '0.00419000', 'b': 6249113, 'a': 6249276, 'T': 1705607586314, 'm': True, 'M': True}
+2024-01-18 11:53:06,415 - INFO - passed
+2024-01-18 11:53:06,415 - INFO - {"e":"trade","E":1705607586328,"s":"BTCUSDT","t":1719261,"p":"41314.01000000","q":"0.00332000","b":6249113,"a":6249278,"T":1705607586328,"m":true,"M":true}
+2024-01-18 11:53:06,415 - INFO - {'e': 'trade', 'E': 1705607586328, 's': 'BTCUSDT', 't': 1719261, 'p': '41314.01000000', 'q': '0.00332000', 'b': 6249113, 'a': 6249278, 'T': 1705607586328, 'm': True, 'M': True}
+2024-01-18 11:53:06,415 - INFO - passed
+2024-01-18 11:53:06,415 - INFO - {"e":"trade","E":1705607586328,"s":"BTCUSDT","t":1719262,"p":"41313.04000000","q":"0.00467000","b":6249139,"a":6249278,"T":1705607586328,"m":true,"M":true}
+2024-01-18 11:53:06,415 - INFO - {'e': 'trade', 'E': 1705607586328, 's': 'BTCUSDT', 't': 1719262, 'p': '41313.04000000', 'q': '0.00467000', 'b': 6249139, 'a': 6249278, 'T': 1705607586328, 'm': True, 'M': True}
+2024-01-18 11:55:18,202 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:55:19,232 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:59:47,170 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 11:59:48,253 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:00:34,715 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:00:35,788 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:03:03,314 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:03:04,351 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:10:25,385 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:10:27,460 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:12:34,481 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:12:52,833 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:14:48,241 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:16:23,646 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:23:42,695 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:26:41,128 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:27:21,165 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:29:49,534 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:30:54,419 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:33:31,705 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:35:06,182 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:37:28,738 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:39:51,690 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:40:58,399 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 12:42:32,303 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 13:00:16,069 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened
+2024-01-18 13:04:56,346 - ERROR - Error with websocket: sent 1011 (unexpected error) keepalive ping timeout; no close frame received
+2024-01-18 13:09:22,341 - INFO - WebSocket connection for wss://testnet.binance.vision/ws/btcusdt@trade opened

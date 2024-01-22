@@ -65,12 +65,17 @@ def time_conv(timestamp):
     # .strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]
 
 
+# Eventually this should be its own background worker:
+# - pull data from Postgresql database
+# - categorize data and do calculations
+# - push data to next process to populate the graph
 def data_processing(shared_queue, exit_event, btimestamp, bprices, etimestamps, eprices):
     global btc_timestamps, btc_prices, eth_timestamps, eth_prices
     btc_timestamps = btimestamp
     btc_prices = bprices
     eth_timestamps = etimestamps
     eth_prices = eprices
+
 
 
     while not exit_event.is_set():
