@@ -1,6 +1,7 @@
 import time
 import datetime
 
+import dash
 import pandas as pd
 import numpy as np
 import json
@@ -39,20 +40,22 @@ def time_conv(timestamp):
 # Takes data from on_message(ws, message) to process data for the dashboard graph
 # @return the graph created from parsing the json response file
 def data_processing(message):
+    global timestamps, prices
     data = json.loads(message)
 
     # When receiving kline data:
     timestamps.append(time_conv(data['E']))
-    prices['current'].append(data['p'])
+    prices['current'].append(float(data['p']))
 
 
-def make_graph():
+def make_graph(title):
     fig.add_trace(go.Scatter(mode='lines'))
     fig.update_layout(
+        title=title,
         showlegend=False,
         xaxis=dict(
             type="date",
-            tickformat="%H:%M:%S %Y-%m-%d"  # Customize the date format
+            tickformat="%H:%M:%S"  # Customize the date format
         ),
         yaxis=dict(
             tickformat=".2f",
@@ -70,6 +73,8 @@ def register_callbacks(app):
         [Input('interval', 'n_intervals')]
     )
     def update_graph(_):
+        if not timestamps or not prices['current']:
+            return dash.no_update
         x_axis = list(timestamps)
         current = list(prices['current'])
 

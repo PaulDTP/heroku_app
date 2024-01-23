@@ -20,7 +20,7 @@ import sys
 
 # Setting default configuration for All loggers
 logging.basicConfig(
-    # formatse each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
+    # formats each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
     format='%(asctime)s - %(levelname)s - %(message)s',
     level=logging.INFO,
     stream=sys.stdout

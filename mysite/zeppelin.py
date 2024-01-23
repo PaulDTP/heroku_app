@@ -24,7 +24,7 @@ server = app.server
 
 backend.register_callbacks(app)
 # Retrieving components for dashboard display
-crypto_graph = backend.make_graph()
+crypto_graph = backend.make_graph("Bitcoin")
 updated = backend.last_updated()
 time_interval = 1000  # in milliseconds
 
