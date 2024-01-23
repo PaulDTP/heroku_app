@@ -21,7 +21,7 @@ from backend import data_processing
 api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
 api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
 # gets Binance user data from the Testnet using respective API key
-client = Client(api_key, api_secret, testnet=True, tld='us');
+#client = Client(api_key, api_secret, testnet=True, tld='us');
 
 # Websocket base endpoint
 # wss = "wss://stream.binancefuture.com"
@@ -61,7 +61,7 @@ def on_close(ws, close_status_code, close_msg):
         print("WebSocket connection is already closed.")
 
 def start_websocket():
-    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@kline_1m'
+    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@trade'
     # Make the API call
     ws = websocket.WebSocketApp(
         url=ws_url,
@@ -71,4 +71,3 @@ def start_websocket():
         on_close=on_close
     )
     ws.run_forever()
-

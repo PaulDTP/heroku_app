@@ -12,62 +12,36 @@ Authored by Isaiah Terrell-Perica
 - Zeppelin uses Binance for price data and account info
 '''
 
-from dash import dash, html, dcc, Input, Output
+from dash import dash, html, dcc
+import threading
 
 # Custom files
 import backend
 from websocket_streams import start_websocket
 
 app = dash.Dash(__name__)
+server = app.server
 
-# Google Analytics tag
-app.index_string = '''
-<!DOCTYPE html>
-<html>
-    <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WMWKTVG0WM"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-WMWKTVG0WM');
-        </script>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
-    </head>
-    <body>
-        {%app_entry%}
-        <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
-        </footer>
-    </body>
-</html>
-'''
-
-# Start websocket and
-start_websocket()
 backend.register_callbacks(app)
 # Retrieving components for dashboard display
 crypto_graph = backend.make_graph()
 updated = backend.last_updated()
-time_interval=1000
+time_interval = 1000  # in milliseconds
 
 # dashboard layout
 app.layout = html.Div(children=[
     html.H2(children=f"Last update: {updated} UTC"),
-    #html.Div(children="Menu"),
+    # html.Div(children="Menu"),
     dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices', id='dropdown'),
     dcc.Graph(id='crypto-graph', figure=crypto_graph),
-    dcc.Interval(id='interval', interval=time_interval)
-    #, generate_table(data)
+    dcc.Interval(id='interval', interval=time_interval),
+    html.H3(children='Logs'),
+    dcc.Textarea(id='logging', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
+                                      'color': 'white'}, persistence=True, readOnly=True)
 ])
 
 # Run the app
 if __name__ == '__main__':
+    wst = threading.Thread(target=start_websocket, daemon=True)
+    wst.start()
     app.run_server(debug=True)
