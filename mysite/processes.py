@@ -11,7 +11,7 @@ import threading
 import multiprocessing
 import asyncio
 
-from websocket_handling import open_websocket, close_websocket
+from websocket_streams import open_websocket, close_websocket
 from backend import data_processing
 
 exit_event = asyncio.Event()

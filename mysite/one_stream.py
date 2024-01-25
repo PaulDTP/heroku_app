@@ -3,6 +3,9 @@ Authored by Isaiah Terrell-Perica
 05/31/2023
 This file handles all websocket connections and data, calling inherited functions for processing and visualization.
 '''
+
+import os
+from dotenv import load_dotenv
 import websocket
 import json
 from binance.client import Client
@@ -18,9 +21,11 @@ from backend import data_processing
 # Secret key: Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK
 
 #testnet api
-api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
-api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
+load_dotenv()
+api_key=os.getenv('TEST_API_KEY')
+api_secret=os.getenv('TEST_API_SECRET')
 # gets Binance user data from the Testnet using respective API key
+<<<<<<< HEAD:mysite/one_stream.py
 client = Client(api_key, api_secret, testnet=True, tld='us')
 
 # Websocket base endpoint
@@ -29,6 +34,9 @@ client = Client(api_key, api_secret, testnet=True, tld='us')
 # base = 'https://testnet.binancefuture.com'
 # User data endpoint
 user_data = '' # find in binance API
+=======
+#client = Client(api_key, api_secret, testnet=True, tld='us');
+>>>>>>> simple:mysite/websocket_streams.py
 
 # Counts number of messages received
 num_messages = 0
@@ -43,11 +51,11 @@ def on_message(ws, message):
     num_messages += 1
 
     # Terminate the WebSocket connection after reaching the maximum number of messages
-    '''if num_messages >= 10:
+    if num_messages >= 1000:
         if ws.sock and ws.sock.connected:
             ws.close()
         else:
-            print("WebSocket connection is already closed.")'''
+            print("WebSocket connection is already closed.")
 
 def on_error(ws, error):
     print("WebSocket error:", error)
@@ -61,7 +69,7 @@ def on_close(ws, close_status_code, close_msg):
         print("WebSocket connection is already closed.")
 
 def start_websocket():
-    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@kline_1m'
+    ws_url = 'wss://testnet.binance.vision/ws/btcusdt@trade'
     # Make the API call
     ws = websocket.WebSocketApp(
         url=ws_url,

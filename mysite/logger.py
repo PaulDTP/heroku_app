@@ -20,7 +20,11 @@ import sys
 
 # Setting default configuration for All loggers
 logging.basicConfig(
+<<<<<<< HEAD
     # formatse each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
+=======
+    # formats each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
+>>>>>>> simple
     format='%(asctime)s - %(levelname)s - %(message)s',
     level=logging.INFO,
     stream=sys.stdout
@@ -62,4 +66,8 @@ def log_status(severity, message):
     elif severity == 'critical':
         zep_log.critical(message)
     else:
+<<<<<<< HEAD
         zep_log.warning(f"Incorrect usage of log status call. Message: {severity}:{message}")
+=======
+        zep_log.warning(f"Incorrect usage of log status call. Message: {severity}:{message}")
+>>>>>>> simple

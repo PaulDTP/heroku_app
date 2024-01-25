@@ -16,6 +16,7 @@ from dash import dash, html, dcc
 from backend import make_graph, last_updated
 from callback_updates import register_callbacks
 from processes import start_backend, end_backend
+from websocket_streams import open_websocket
 
 app = dash.Dash(__name__)
 server = app.server
@@ -23,12 +24,7 @@ server = app.server
 # Retrieving components for Zeppelin
 # Should make one main graph with subplots for each coin
 coin_graphs = {
-    # btc': make_graph("Bitcoin Price"),
-    # 'eth': make_graph("Etherium Price")
-
-    # Function creates empty fig objects for each coin's graph
     0: make_graph("Bitcoin Price"),
-    # 1: make_graph("Etherium Price")
 }
 time_interval = 1000  # in milliseconds
 
@@ -54,3 +50,4 @@ if __name__ == '__main__':
         end_backend()
 
 # postgres://zeppelin_user:taTZucupmhMbnEYXFZOHUkIXMFkSKEh9@dpg-cmlb7h6g1b2c73futgm0-a/zeppelin
+

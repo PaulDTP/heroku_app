@@ -10,10 +10,22 @@ This file handles all calculations and data processing needed for coin graphs an
 import datetime
 import subprocess
 
+import dash
+import pandas as pd
+import numpy as np
 import json
+import git
+from collections import defaultdict, deque
+from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
-from logger import log_status
+
+from logger import log_status, get_logs
+
+max_queue_size = 1000
+# X and Y axis data using deque for automatic resizing
+timestamps = deque(maxlen=max_queue_size)
+prices = defaultdict(lambda: deque(maxlen=max_queue_size))
 
 max_queue_size = 1000
 
@@ -76,8 +88,6 @@ def data_processing(shared_queue, exit_event, btimestamp, bprices, etimestamps, 
     eth_timestamps = etimestamps
     eth_prices = eprices
 
-
-
     while not exit_event.is_set():
         print("processing")
         msg = shared_queue.get(block=True)
@@ -121,13 +131,14 @@ def data_processing(shared_queue, exit_event, btimestamp, bprices, etimestamps, 
         #TODO
         '''
 
-
 # Takes data from on_message(ws, message) to process data for the dashboard graph
 # @return the graph created from parsing the json response file
 '''def data_processing(message, url):
     global btc_timestamps, btc_timestamps, eth_prices, eth_timestamps
     data_lock.acquire(timeout=1)
 
+def data_processing(message):
+    global timestamps, prices
     data = json.loads(message)
     symbol = data['s'] # Symbol (ex: BNBBTC)
     event = data['e'] # Event type (kline, aggtrade, etc)
