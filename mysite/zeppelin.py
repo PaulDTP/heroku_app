@@ -32,7 +32,8 @@ time_interval = 1000  # in milliseconds
 app.layout = html.Div(children=[
     html.H2(children=f"Last update: {updated} UTC"),
     # html.Div(children="Menu"),
-    dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices', id='dropdown'),
+    dcc.Dropdown(['Coin Prices (Real Time)', 'Our Trades', 'Our Returns'], 'Current Coin Prices',
+                 id='dropdown'),
     dcc.Graph(id='crypto-graph', figure=crypto_graph),
     dcc.Interval(id='interval', interval=time_interval),
     html.H3(children='Logs'),
@@ -44,4 +45,5 @@ app.layout = html.Div(children=[
 if __name__ == '__main__':
     wst = threading.Thread(target=start_websocket, daemon=True)
     wst.start()
+
     app.run_server(debug=True)
