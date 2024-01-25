@@ -1,6 +1,6 @@
 '''
 Authored by Isaiah Terrell-Perica
-06/04/2023
+2023/06/04
 This file handles Zeppelin's logging.
 
 DEBUG
@@ -20,11 +20,7 @@ import sys
 
 # Setting default configuration for All loggers
 logging.basicConfig(
-<<<<<<< HEAD
-    # formatse each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
-=======
     # formats each log line like so: 2024-01-03 10:04:25,148 - INFO - Data received.
->>>>>>> simple
     format='%(asctime)s - %(levelname)s - %(message)s',
     level=logging.INFO,
     stream=sys.stdout
@@ -33,13 +29,13 @@ logging.basicConfig(
 # Creating main logger instance
 log_handler = logging.StreamHandler()
 memory_handler = logging.handlers.MemoryHandler(capacity=100, target=log_handler)
-file_handler = logging.FileHandler('app.log')
+#file_handler = logging.FileHandler('app.log')
 
 # Initializing new logger and adding handlers
 zep_log = logging.getLogger('Zeppelin')
 zep_log.addHandler(memory_handler)
 zep_log.addHandler(log_handler)
-zep_log.addHandler(file_handler)
+#zep_log.addHandler(file_handler)
 
 # Creating formatter from the basicConfig formatting
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -47,7 +43,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 # Applying the formatter to each handler
 log_handler.setFormatter(formatter)
 memory_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
+#file_handler.setFormatter(formatter)
 
 def get_logs():
     records = memory_handler.buffer.copy()
@@ -66,8 +62,5 @@ def log_status(severity, message):
     elif severity == 'critical':
         zep_log.critical(message)
     else:
-<<<<<<< HEAD
         zep_log.warning(f"Incorrect usage of log status call. Message: {severity}:{message}")
-=======
-        zep_log.warning(f"Incorrect usage of log status call. Message: {severity}:{message}")
->>>>>>> simple
+

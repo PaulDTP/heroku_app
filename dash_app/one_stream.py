@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 import websocket
 import json
-from binance.client import Client
+from exchanges.client import Client
 
 from backend import data_processing
 

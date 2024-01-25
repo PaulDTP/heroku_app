@@ -6,36 +6,11 @@ This file handles all websocket connections and the resulting data, calling inhe
 import time
 
 import websockets
-#from binance.client import Client
 
-from logger import log_status
-
-# Binance - real account
-# API key: sN8B8IP18Sba4xi7X5aX2TaQtxMu8zxr5o2FkPxZvZBDXwwFT7Sl9VYzeILh4bCi
-# secret key: 3BObFKszldGkDE9GjFe9YQpwPr0i0JJWVUGsU3EWR7KwDUCucDoVNl0GQwiOolkG
-
-# Binance Spot Test Network: https://testnet.binance.vision/
-api_key='odwF9bVsSsxjZnckgbSu3NfUgGqqJ2sow4OelwjEttIBB08r3Z5umQL0A03lp2Gd'
-api_secret='Q3bcPKvbvlVpzv5BQe3lj7EkWdRhevEp24Oi7TENce6xO0FiXUNQKDa47QTyyKcK'
-
-# Gets Binance user data from the Testnet using respective API key
-# client = Client(api_key, api_secret, testnet=True, tld='us');
-
-# Websocket base endpoint
-# wss = "wss://stream.binancefuture.com"
-
-# Base endpoint
-# base = 'wss://testnet.binance.vision'
-# User data endpoint
-user_data = '' # find in binance API
-
-# Will list all websockets that are opened
-open_websockets = []
-time_processed = []
-
+from dash_app.logger import log_status
 
 # Starts websocket connections and calls appropriate processing function(s)
-async def open_websocket(url, event, shared_queue):
+async def open_websocket(url, event, shared_queue, exchange):
     global open_websockets, time_processed
     try:
         async with websockets.connect(url) as ws:
