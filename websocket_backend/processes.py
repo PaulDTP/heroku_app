@@ -1,6 +1,6 @@
 '''
 @author Isaiah Terrell-Perica 
-@date 01/15/2024
+@date 1/15/2024
 
 This file handles multiprocessing for Zeppelin functionality.  
 - Processes:
@@ -12,15 +12,15 @@ import asyncio
 
 from websocket_streams import open_websocket, close_websocket
 from backend import data_processing
-import exchanges
 from dash_app.logger import log_status
 from exchanges import Client
-from redis import to_redis
+from redis_handler import to_redis, close_redis
+
 exit_event = asyncio.Event()
 
 async def open_websocket(exchange, symbol):
     time_processed = []
-    if 'watchTrades' in exchange.has: # line exists for understanding, must check methods exist
+    if 'watchTrades' in exchange.has: # line exists for understanding, you must check methods exist with CCXT
         log_status('info', f"WebSocket connection for {symbol} opened")
         while not exit_event.is_set():
             start_time = time.time()
@@ -39,9 +39,7 @@ async def open_websocket(exchange, symbol):
 async def start_backend(client):
     '''
     Starts backend processes for websockets and exchange connections
-    :return:
     '''
-
     symbols = ['BTC/USDT']  # , 'ETH/USDT', 'ETH/BTC']
     await asyncio.gather(*[open_websocket(client.exchange, symbol) for symbol in symbols])
 
@@ -53,3 +51,4 @@ async def end_backend(client):
     log_status('info', 'Ending backend processes.')
     exit_event.set()
     await client.close_exchange()
+    close_redis()

@@ -15,8 +15,7 @@ from dash import dash, html, dcc
 
 from backend import make_graph, last_updated
 from callback_updates import register_callbacks
-from processes import start_backend, end_backend
-from websocket_streams import open_websocket
+from websocket_backend.processes import start_backend, end_backend
 
 app = dash.Dash(__name__)
 server = app.server

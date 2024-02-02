@@ -7,14 +7,12 @@ This file runs the websocket connections and sends data to relevant processes.
 Websocket -> Redis -> Celery -> PostgreSQL
 '''
 
-import redis
 import asyncio
 import json
 
 from dash_app.logger import log_status
 from processes import start_backend, end_backend
 from exchanges import Client
-
 
 async def main():
     client = Client('binanceus')

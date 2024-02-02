@@ -37,7 +37,7 @@ class Client:
         self.exchange = exch_class({'enableRateLimit': True,
                            'apiKey': Client.apiKey, 'secret': Client.apiSecret})
         self.exchange.set_sandbox_mode(True)
-        self.exchange.number = decimal.Decimal
+        self.exchange.number = str #decimal.Decimal
         Client.open_exchanges.append(self.name)
 
     async def close_exchange(self):
