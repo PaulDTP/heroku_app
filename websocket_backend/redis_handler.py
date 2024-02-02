@@ -21,7 +21,7 @@ def to_redis(data):
         log_status("error", "Redis client not initialized.")
     #redis_client.rpush('trades_queue', data)
     else:
-        redis_client.publish('test', data)
+        redis_client.publish('queue', "Incoming data")
 
 def first_elem():
     if redis_client is None:

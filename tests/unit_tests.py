@@ -24,7 +24,7 @@ class AsyncTests(unittest.IsolatedAsyncioTestCase):
     async def test_get_data(self):
         await self.instance.exchange.load_markets()
         data = await self.instance.exchange.fetchTicker('BTC/USDT')
-        self.assertIsInstance(data, str)
+        self.assertIsInstance(data['high'], str)
 
 class RedisTests(unittest.TestCase):
     @classmethod
@@ -45,7 +45,6 @@ class RedisTests(unittest.TestCase):
         pass
 
     def test_connection(self):
-        cls.mock
         pass
 
     def redis_example(self):
