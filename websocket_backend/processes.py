@@ -14,7 +14,7 @@ from websocket_streams import open_websocket, close_websocket
 from backend import data_processing
 from dash_app.logger import log_status
 from exchanges import Client
-from redis_handler import to_redis, close_redis
+from redis_handler import create_client, to_redis, close_redis
 
 exit_event = asyncio.Event()
 
@@ -27,6 +27,7 @@ async def open_websocket(exchange, symbol):
             try:
                 data = await exchange.watchTrades(symbol)
                 to_redis(data)
+                process.delay()
             except Exception as e:
                 log_status('error', f"Error in websocket: {e}")
             finally:
@@ -41,7 +42,9 @@ async def start_backend(client):
     Starts backend processes for websockets and exchange connections
     '''
     symbols = ['BTC/USDT']  # , 'ETH/USDT', 'ETH/BTC']
+    create_client()
     await asyncio.gather(*[open_websocket(client.exchange, symbol) for symbol in symbols])
+
 
 async def end_backend(client):
     '''
