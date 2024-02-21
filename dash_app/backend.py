@@ -7,7 +7,7 @@ This file handles all calculations and data processing needed for coin graphs an
 - May need to separate processing for data or conversions
 - Should test time taken to run functions
 '''
-import datetime
+from datetime import datetime
 import subprocess
 
 import dash
@@ -19,32 +19,23 @@ from collections import defaultdict, deque
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
-
 from logger import log_status, get_logs
 
-max_queue_size = 1000
-# X and Y axis data using deque for automatic resizing
-timestamps = deque(maxlen=max_queue_size)
-prices = defaultdict(lambda: deque(maxlen=max_queue_size))
-
-max_queue_size = 1000
-
-btc_timestamps = None
-btc_prices = None
-eth_timestamps = None
-eth_prices = None
-
-
-# Returns the last update from git commit
-# @return a human-readable string of when the last ~/z-algo git commit occurred
 def last_updated():
+    """
+    Returns the last update from git commit
+    :return: human-readable string of last ~/z-algo git commit
+    """
     commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cd'])
     return commit_date.decode('utf-8').strip()
 
 
-# Creates a blank graph ready for data
-# @return the initial graph 
 def make_graph(title):
+    """
+    Creates a blank graph ready for data
+    :param title: title for created graph
+    :return fig: blank Figure object
+    """
     fig = go.Figure()
     # fig.add_trace(go.Candlestick(name='main'))
     fig.add_trace(go.Scatter(name='main', mode='lines'))
@@ -53,7 +44,7 @@ def make_graph(title):
         showlegend=False,
         xaxis=dict(
             type="date",
-            tickformat="%H:%M:%S %Y-%m-%d"  # Customizing date format
+            tickformat="%H:%M:%S" #%Y-%m-%d"  # Customizing date format
         ),
         yaxis=dict(
             tickformat=".2f",  # Precision of y labels
@@ -62,120 +53,32 @@ def make_graph(title):
     )
     return fig
 
-
-# @return coin data requested from argument
-def get_time_price(coin):
-    if coin == 0 or coin == 'btc':
-        return btc_timestamps, btc_prices
-    if coin == 1 or coin == 'eth':
-        return eth_timestamps, eth_prices
-
-
-# @return a timestamp converted to a human-readable format
 def time_conv(timestamp):
-    return datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%H:%M:%S.%f')[:-4]
-    # .strftime('%Y-%m-%d %H:%M:%S.%f')[:-4]
+    """
+    Converts timestamp to a human-readable format
+    :param timestamp: epoch time to convert
+    :return: human-readable time
+    """
+    return datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S')
 
 
 # Eventually this should be its own background worker:
 # - pull data from Postgresql database
 # - categorize data and do calculations
 # - push data to next process to populate the graph
-def data_processing(shared_queue, exit_event, btimestamp, bprices, etimestamps, eprices):
-    global btc_timestamps, btc_prices, eth_timestamps, eth_prices
-    btc_timestamps = btimestamp
-    btc_prices = bprices
-    eth_timestamps = etimestamps
-    eth_prices = eprices
+def data_processing(trades):
+    sec_data = {}
+    for data in trades:
+        ind_trade = []
+        symbol = data['symbol']  # Symbol (ex: BNBBTC)
+        event = data['info']['e']  # Event type (kline, aggtrade, etc)
+        timestamp = time_conv(data['timestamp'])  # Event time ex: 1672515782136
 
-    while not exit_event.is_set():
-        print("processing")
-        msg = shared_queue.get(block=True)
-        data = json.loads(msg)
-        symbol = data['s']  # Symbol (ex: BNBBTC)
-        event = data['e']  # Event type (kline, aggtrade, etc)
-        timestamp = time_conv(data['E'])  # Event time ex: 1672515782136
-        # Bitcoin Websocket Handling     
-        if symbol == 'BTCUSDT':
-            # if timestamp not in btc_timestamps:
-            btc_timestamps.append(timestamp)
-            # Rolling window ticker stats (percent change, volume)
-            if event == '24hrTicker':
-                btc_prices['current'].append(float(data['c']))
-            # Real-time trades
-            elif event == 'trade':
-                btc_prices['current'].append(float((data['p'])))
-            elif event == 'kline':
-                data = data['k']
-                btc_prices['open'].append(float(data['o']))
-                btc_prices['high'].append(float(data['h']))
-                btc_prices['low'].append(float(data['l']))
-                btc_prices['close'].append(float(data['c']))
+        sec_data[timestamp] = data['price']
+    if len(sec_data) > 1:
+        log_status("error", "Processing funct. larger than 1")
+    return sec_data
 
-        # Etherium Websocket Handling     
-        elif symbol == 'ETHUSDT':
-            eth_timestamps.append(timestamp)
-            if event == '24hrTicker':
-                eth_prices['current'].append(float(data['c']))
-            elif event == 'trade':
-                eth_prices['current'].append(float(data['p']))
-            elif event == 'kline':
-                data = data['k']
-                eth_prices['open'].append(float(data['o']))
-                eth_prices['high'].append(float(data['h']))
-                eth_prices['low'].append(float(data['l']))
-                eth_prices['close'].append(float(data['c']))
-
-        # Other data types:
-        '''
-        #TODO
-        '''
-
-# Takes data from on_message(ws, message) to process data for the dashboard graph
-# @return the graph created from parsing the json response file
-'''def data_processing(message, url):
-    global btc_timestamps, btc_timestamps, eth_prices, eth_timestamps
-    data_lock.acquire(timeout=1)
-
-def data_processing(message):
-    global timestamps, prices
-    data = json.loads(message)
-    symbol = data['s'] # Symbol (ex: BNBBTC)
-    event = data['e'] # Event type (kline, aggtrade, etc)
-    timestamp = time_conv(data['E']) # Event time ex: 1672515782136
-
-    # Bitcoin Websocket Handling     
-    if symbol == 'BTCUSDT':
-        if timestamp not in btc_timestamps:
-            btc_timestamps.append(timestamp)
-        # Rolling window ticker stats (percent change, volume)
-        if event == '24hrTicker':
-            btc_prices['current'].append(float(data['c']))
-        # Real-time trades
-        elif event == 'trade':
-            btc_prices['current'].append(float((data['p'])))
-        elif event == 'kline':
-            data = data['k']
-            btc_prices['open'].append(float(data['o']))
-            btc_prices['high'].append(float(data['h']))
-            btc_prices['low'].append(float(data['l']))
-            btc_prices['close'].append(float(data['c']))
-
-    # Etherium Websocket Handling     
-    elif symbol == 'ETHUSDT':
-        eth_timestamps.append(timestamp)
-        if event == '24hrTicker':
-            eth_prices['current'].append(float(data['c']))
-        elif event == 'trade':
-            eth_prices['current'].append(float(data['p']))
-        elif event == 'kline':
-            data = data['k']
-            eth_prices['open'].append(float(data['o']))
-            eth_prices['high'].append(float(data['h']))
-            eth_prices['low'].append(float(data['l']))
-            eth_prices['close'].append(float(data['c']))
-    data_lock.release()
-'''
 # Payload Types
 '''
 Trade Stream Payload

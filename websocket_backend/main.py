@@ -6,7 +6,6 @@
 This file runs the websocket connections and sends data to relevant processes.
 Websocket -> Redis -> Celery -> PostgreSQL
 '''
-
 import asyncio
 import json
 
@@ -19,7 +18,8 @@ async def main():
     await client.exchange.load_markets()
 
     try:
-       await start_backend(client)
+        # Connects to websockets through Client object
+        await start_backend(client) # this line is blocking b/c of await
     except Exception as e:
         log_status('error', f'{e}')
     finally:

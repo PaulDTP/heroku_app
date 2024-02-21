@@ -16,6 +16,8 @@ from dash import dash, html, dcc
 from backend import make_graph, last_updated
 from callback_updates import register_callbacks
 from websocket_backend.processes import start_backend, end_backend
+from zep_redis import create_rclient, close_redis
+
 
 app = dash.Dash(__name__)
 server = app.server
@@ -24,6 +26,7 @@ server = app.server
 # Should make one main graph with subplots for each coin
 coin_graphs = {
     0: make_graph("Bitcoin Price"),
+    # 1: make_graph("Etherium Price"),
 }
 time_interval = 1000  # in milliseconds
 
@@ -32,20 +35,19 @@ app.layout = html.Div(children=[
     html.H2(children="Zeppelin"),
     html.Div(children=f"Last commit: {last_updated()} UTC"),
     # List of all choices in [], then default selected choice
-    dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
+    #dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
+    dcc.Dropdown(['Coin Prices (Real Time)'], 'Coin Prices (Real Time)', id='dropdown'),
     dcc.Graph(id='btc-graph', figure=coin_graphs[0]),
     dcc.Interval(id='interval', interval=time_interval, n_intervals=0),
     html.H3(children='Logs'),
     dcc.Textarea(id='logging', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
                                       'color': 'white'}, persistence=True, readOnly=True)
 ])
-register_callbacks(app, coin_graphs)
 
 if __name__ == '__main__':
     try:
-        start_backend()
+        create_rclient()
+        register_callbacks(app, coin_graphs)
         app.run_server(debug=True)
     finally:
-        end_backend()
-
-# postgres://zeppelin_user:taTZucupmhMbnEYXFZOHUkIXMFkSKEh9@dpg-cmlb7h6g1b2c73futgm0-a/zeppelin
+        close_redis()
