@@ -19,7 +19,7 @@ from dash_app.callback_updates import register_callbacks
 from websocket_backend.processes import start_backend, end_backend
 from dash_app.zep_redis import create_rclient, close_redis
 from dash_app.callback_updates import update
-from dash_app.logger import get_logs
+from dash_app.logger import get_logs, log_status
 
 
 app = dash.Dash(__name__)
@@ -61,4 +61,5 @@ try:
     register_callbacks(app, coin_graphs)
     #app.run_server(debug=False, host='0.0.0.0', port=8050)
 finally:
+    log_status("info", "Closing Redis and websockets")
     close_redis()
