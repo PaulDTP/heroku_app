@@ -19,7 +19,7 @@ from collections import defaultdict, deque
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 
-from logger import log_status, get_logs
+from dash_app.logger import log_status, get_logs
 
 def last_updated():
     """

@@ -11,7 +11,7 @@ from kombu import Exchange, Queue
 import redis
 import json
 
-from logger import log_status
+from dash_app.logger import log_status
 
 celery = Celery('zep')
 celery.config_from_object(CeleryConfig)

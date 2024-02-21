@@ -10,8 +10,8 @@ import asyncio
 import json
 
 from dash_app.logger import log_status
-from processes import start_backend, end_backend
-from exchanges import Client
+from websocket_backend.processes import start_backend, end_backend
+from websocket_backend.exchanges import Client
 
 async def main():
     client = Client('binanceus')

@@ -10,9 +10,9 @@ from dash import dash, Input, Output
 from datetime import datetime
 import time
 
-from backend import data_processing
-from logger import get_logs, log_status
-from zep_redis import from_redis
+from dash_app.backend import data_processing
+from dash_app.logger import get_logs, log_status
+from dash_app.zep_redis import from_redis
 
 NUM_COINS = 2
 
@@ -75,13 +75,7 @@ def update(fig):
 def register_callbacks(app, coin_graphs):
     # Updates dashboard graph with websocket data
     # @return the output for all graphs on the main page for Zeppelin
-    @app.callback(
-        [Output('btc-graph', 'figure'),
-         Output('logging', 'value')],
-        [Input('interval', 'n_intervals')]
-    )
-    def updates(_):
-        return update(coin_graphs[0]), '\n'.join(get_logs())
+
 
     # Changes Zeppelin's main page depending on dropdown selection
     # @return the selection made on main page

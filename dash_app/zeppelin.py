@@ -14,10 +14,12 @@ This file handles the display of the Zeppelin web-app.
 from dash import dash, html, dcc
 from dash import Output, Input
 
-from backend import make_graph, last_updated
-from callback_updates import register_callbacks
+from dash_app.backend import make_graph, last_updated
+from dash_app.callback_updates import register_callbacks
 from websocket_backend.processes import start_backend, end_backend
-from zep_redis import create_rclient, close_redis
+from dash_app.zep_redis import create_rclient, close_redis
+from dash_app.callback_updates import update
+from dash_app.logger import get_logs
 
 
 app = dash.Dash(__name__)
@@ -45,10 +47,18 @@ app.layout = html.Div(children=[
                                       'color': 'white'}, persistence=True, readOnly=True, persistence_type='local')
 ])
 
-if __name__ == '__main__':
-    try:
-        create_rclient()
-        register_callbacks(app, coin_graphs)
-        app.run_server(debug=False)
-    finally:
-        close_redis()
+
+@app.callback(
+    [Output('btc-graph', 'figure'),
+     Output('logging', 'value')],
+    [Input('interval', 'n_intervals')]
+)
+def updates(_):
+    return update(coin_graphs[0]), '\n'.join(get_logs())
+
+try:
+    create_rclient()
+    register_callbacks(app, coin_graphs)
+    #app.run_server(debug=False, host='0.0.0.0', port=8050)
+finally:
+    close_redis()
