@@ -49,6 +49,6 @@ if __name__ == '__main__':
     try:
         create_rclient()
         register_callbacks(app, coin_graphs)
-        app.run_server(debug=True)
+        app.run_server(debug=False)
     finally:
         close_redis()
