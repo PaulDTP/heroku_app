@@ -17,6 +17,7 @@ CRITICAL
 
 import logging, logging.handlers
 import sys
+from datetime import datetime
 
 # Setting default configuration for All loggers
 logging.basicConfig(
@@ -45,9 +46,14 @@ log_handler.setFormatter(formatter)
 memory_handler.setFormatter(formatter)
 #file_handler.setFormatter(formatter)
 
+log_buffer = []
+
 def get_logs():
+    global log_buffer
     records = memory_handler.buffer.copy()
-    return [x.getMessage() for x in records]
+    memory_handler.buffer.clear()
+    log_buffer += [f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {x.getMessage()}" for x in records]
+    return log_buffer
 
 # Creates a custom log message with severity and message
 def log_status(severity, message):

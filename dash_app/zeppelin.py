@@ -12,6 +12,7 @@ This file handles the display of the Zeppelin web-app.
 - Zeppelin currently uses Binance for price data and account info
 '''
 from dash import dash, html, dcc
+from dash import Output, Input
 
 from backend import make_graph, last_updated
 from callback_updates import register_callbacks
@@ -36,12 +37,12 @@ app.layout = html.Div(children=[
     html.Div(children=f"Last commit: {last_updated()} UTC"),
     # List of all choices in [], then default selected choice
     #dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
-    dcc.Dropdown(['Coin Prices (Real Time)'], 'Coin Prices (Real Time)', id='dropdown'),
+    dcc.Dropdown(['Coin Prices (Real-time Trades)'], 'Coin Prices (Real-time Trades)', id='dropdown'),
     dcc.Graph(id='btc-graph', figure=coin_graphs[0]),
     dcc.Interval(id='interval', interval=time_interval, n_intervals=0),
     html.H3(children='Logs'),
     dcc.Textarea(id='logging', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
-                                      'color': 'white'}, persistence=True, readOnly=True)
+                                      'color': 'white'}, persistence=True, readOnly=True, persistence_type='local')
 ])
 
 if __name__ == '__main__':

@@ -24,11 +24,12 @@ all_prices = []
 def update(fig):
     global all_times, all_prices
     data = from_redis()
+
+    # Only update graph if data exists
+    if not data:
+        return dash.no_update
     sec_data = data_processing(data)
 
-    # Only update graphs if data exists
-    if not sec_data:
-        return dash.no_update
 
     format = '%Y-%m-%d %H:%M:%S'
     time = list(map(lambda x: datetime.strptime(x, format), sec_data.keys()))
@@ -37,11 +38,14 @@ def update(fig):
     all_times += time
     all_prices += price
 
-    #log_status("info",f"Updating graph with {len(prices)} prices")
+    # Temporary
+    if len(all_times) > 10000:
+        all_times = all_times[5000:]
+        all_prices = all_prices[5000:]
 
     # Extending y-axis for easier viewing
-    price_min = min(all_prices)
-    price_max = max(all_prices)
+    price_min = min(all_prices[-100:])
+    price_max = max(all_prices[-100:])
     extended_min = price_min - 0.25 * (price_max - price_min)
     extended_max = price_max + 0.25 * (price_max - price_min)
 
@@ -63,6 +67,7 @@ def update(fig):
         y=all_prices,
         selector=dict(name="main")
     )
+    #fig['layout']['xaxis']['ticktext'] = time[0].strftime('%Y-%m-%d')
     return fig
 
 

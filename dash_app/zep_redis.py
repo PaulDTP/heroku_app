@@ -36,7 +36,12 @@ def from_redis():
     if redis_client is None:
         log_status("error", "Redis client not initialized.")
     else:
-        return json.loads(redis_client.lpop('queue'))
+        msg = redis_client.lpop('queue')
+        if msg is None:
+            log_status("warning", "No data from Redis")
+            return None
+        else:
+            return json.loads(msg)
 
 
 def close_redis():
