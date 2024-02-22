@@ -19,7 +19,6 @@ import asyncio
 
 #from ws_backend import data_processing
 from dash_app.logger import log_status
-from websocket_backend.celery_worker import process_data
 from dash_app.zep_redis import create_rclient, close_redis, to_redis
 
 exit_event = asyncio.Event()
