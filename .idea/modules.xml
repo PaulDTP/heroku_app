@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/../../freqtrade/.idea/freqtrade.iml" filepath="$PROJECT_DIR$/../../freqtrade/.idea/freqtrade.iml" />
+>>>>>>> barebones
       <module fileurl="file://$PROJECT_DIR$/.idea/z-algo.iml" filepath="$PROJECT_DIR$/.idea/z-algo.iml" />
     </modules>
   </component>
