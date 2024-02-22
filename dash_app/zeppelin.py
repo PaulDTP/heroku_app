@@ -59,5 +59,5 @@ try:
     register_callbacks(app, coin_graphs)
     #app.run_server(debug=False, host='0.0.0.0', port=8050)
 finally:
-    log_status("info", "Closing...")
+    log_status("info", "Starting...")
     #close_redis()
