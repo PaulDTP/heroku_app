@@ -36,7 +36,7 @@ time_interval = 1000  # in milliseconds
 # Dashboard layout
 app.layout = html.Div(children=[
     html.H2(children="Zeppelin"),
-    html.Div(children=f"Last commit: {last_updated()} UTC"),
+    #html.Div(children=f"Last commit: {last_updated()} UTC"),
     # List of all choices in [], then default selected choice
     #dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
     dcc.Dropdown(['Coin Prices (Real-time Trades)'], 'Coin Prices (Real-time Trades)', id='dropdown'),
