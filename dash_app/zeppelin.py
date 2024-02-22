@@ -11,8 +11,8 @@ This file handles the display of the Zeppelin web-app.
     4) option to choose strategies
 - Zeppelin currently uses Binance for price data and account info
 '''
-from dash import dash, html, dcc
-from dash import Output, Input
+from dash import dash, html, dcc, Output, Input
+from dash_extensions import WebSocket
 
 from dash_app.backend import make_graph, last_updated
 from dash_app.callback_updates import register_callbacks
@@ -41,25 +41,23 @@ app.layout = html.Div(children=[
     #dcc.Dropdown(['Coin Prices (Real Time)', 'Trades', 'Returns'], 'Coin Prices (Real Time)', id='dropdown'),
     dcc.Dropdown(['Coin Prices (Real-time Trades)'], 'Coin Prices (Real-time Trades)', id='dropdown'),
     dcc.Graph(id='btc-graph', figure=coin_graphs[0]),
+    WebSocket(id='ws', url='wss://testnet.binance.vision/ws/btcusdt@trade'),
     dcc.Interval(id='interval', interval=time_interval, n_intervals=0),
     html.H3(children='Logs'),
     dcc.Textarea(id='logging', style={'width': '100%', 'height': '300px', 'backgroundColor': 'black',
                                       'color': 'white'}, persistence=True, readOnly=True, persistence_type='local')
 ])
-
-
-@app.callback(
-    [Output('btc-graph', 'figure'),
-     Output('logging', 'value')],
-    [Input('interval', 'n_intervals')]
-)
-def updates(_):
-    return update(coin_graphs[0]), '\n'.join(get_logs())
+# update_graph = """function(msg) {
+#     if(!msg){return {};}  // no data, just return
+#     const data = JSON.parse(msg.data);  // read the data
+#     return {data: [{y: data, type: "scatter"}]}};  // plot the data
+# """
+# app.clientside_callback(update_graph, Output("btc-graph", "figure"), Input("ws", "message"))
 
 try:
-    create_rclient()
+    #create_rclient()
     register_callbacks(app, coin_graphs)
-    #app.run_server(debug=False, host='0.0.0.0', port=8050)
+    app.run_server(debug=False, host='0.0.0.0', port=8050)
 finally:
-    log_status("info", "Closing Redis and websockets")
-    close_redis()
+    log_status("info", "Closing...")
+    #close_redis()

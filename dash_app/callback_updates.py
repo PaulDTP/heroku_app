@@ -10,7 +10,7 @@ from dash import dash, Input, Output
 from datetime import datetime
 import time
 
-from dash_app.backend import data_processing
+from dash_app.backend import data_processing, json_data_processing
 from dash_app.logger import get_logs, log_status
 from dash_app.zep_redis import from_redis
 
@@ -19,16 +19,22 @@ NUM_COINS = 2
 # Would prefer to not have global
 all_times = []
 all_prices = []
+log_buffer = []
 
 # Updates a fig graph depending on the coin type
-def update(fig):
+def update(fig, msg):
     global all_times, all_prices
-    data = from_redis()
+    #data = from_redis()
+
+    data = msg
 
     # Only update graph if data exists
     if not data:
         return dash.no_update
-    sec_data = data_processing(data)
+    if isinstance(msg, dict):
+        sec_data = json_data_processing(data)
+    else:
+        sec_data = data_processing(data)
 
 
     format = '%Y-%m-%d %H:%M:%S'
@@ -73,8 +79,28 @@ def update(fig):
 
 # Receives callbacks to update Zeppelin
 def register_callbacks(app, coin_graphs):
-    # Updates dashboard graph with websocket data
-    # @return the output for all graphs on the main page for Zeppelin
+    """
+    Updates dashboard based on type of input
+    :param app: Dash app
+    :param coin_graphs: dict holding Figure objects for securities
+    :return fig, str: Figure object and log lines to output
+    """
+
+    @app.callback(
+         Output('logging', 'value'),
+        Input('interval', 'n_intervals')
+    )
+    def update_log(_):
+        global log_buffer
+        log_buffer = get_logs(log_buffer)
+        return '\n'.join(log_buffer)
+
+    @app.callback(
+        Output('btc-graph', 'figure'),
+        Input("ws", 'message')
+    )
+    def update_graph(msg):
+        return update(coin_graphs[0], msg)
 
 
     # Changes Zeppelin's main page depending on dropdown selection

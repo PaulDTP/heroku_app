@@ -69,7 +69,6 @@ def time_conv(timestamp):
 def data_processing(trades):
     sec_data = {}
     for data in trades:
-        ind_trade = []
         symbol = data['symbol']  # Symbol (ex: BNBBTC)
         event = data['info']['e']  # Event type (kline, aggtrade, etc)
         timestamp = time_conv(data['timestamp'])  # Event time ex: 1672515782136
@@ -77,6 +76,35 @@ def data_processing(trades):
         sec_data[timestamp] = data['price']
     if len(sec_data) > 1:
         log_status("error", "Processing funct. larger than 1")
+    return sec_data
+
+def json_data_processing(trades):
+    """
+    JSON Loads:
+    {'e': 'trade',
+     'E': 1708580838879,
+     's': 'BTCUSDT',
+     't': 1168941,
+     'p': '51573.88000000',
+     'q': '0.00010000',
+     'b': 5630322,
+     'a': 5630360,
+     'T': 1708580838878,
+     'm': True,
+     'M': True}
+    :param trades: trades to parse
+    :return sec_data: dict with key time and value price
+    """
+    sec_data = {}
+    data = json.loads(trades['data'])
+
+    symbol = data['s']  # Symbol (ex: BNBBTC)
+    event = data['e']  # Event type (kline, aggtrade, etc)
+    timestamp = time_conv(data['E'])  # Event time ex: 1672515782136
+
+    sec_data[timestamp] = data['p']
+    if len(sec_data) > 1:
+        log_status("error", "Processing funct. returning larger than 1")
     return sec_data
 
 # Payload Types

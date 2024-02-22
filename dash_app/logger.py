@@ -46,10 +46,7 @@ log_handler.setFormatter(formatter)
 memory_handler.setFormatter(formatter)
 #file_handler.setFormatter(formatter)
 
-log_buffer = []
-
-def get_logs():
-    global log_buffer
+def get_logs(log_buffer):
     records = memory_handler.buffer.copy()
     memory_handler.buffer.clear()
     log_buffer += [f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}: {x.getMessage()}" for x in records]
