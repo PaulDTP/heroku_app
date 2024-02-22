@@ -16,7 +16,6 @@ from dash_extensions import WebSocket
 
 from dash_app.backend import make_graph, last_updated
 from dash_app.callback_updates import register_callbacks
-from websocket_backend.processes import start_backend, end_backend
 from dash_app.zep_redis import create_rclient, close_redis
 from dash_app.callback_updates import update
 from dash_app.logger import get_logs, log_status
