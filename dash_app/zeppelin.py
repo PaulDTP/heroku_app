@@ -57,7 +57,7 @@ app.layout = html.Div(children=[
 try:
     #create_rclient()
     register_callbacks(app, coin_graphs)
-    app.run_server(debug=False, host='0.0.0.0', port=8050)
+    #app.run_server(debug=False, host='0.0.0.0', port=8050)
 finally:
     log_status("info", "Closing...")
     #close_redis()
