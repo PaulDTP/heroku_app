@@ -50,8 +50,8 @@ def update(fig, msg):
         all_prices = all_prices[5000:]
 
     # Extending y-axis for easier viewing
-    price_min = min(all_prices[-100:])
-    price_max = max(all_prices[-100:])
+    price_min = min(all_prices)
+    price_max = max(all_prices)
     extended_min = price_min - 0.25 * (price_max - price_min)
     extended_max = price_max + 0.25 * (price_max - price_min)
 
