@@ -69,6 +69,7 @@ def update(fig, msg):
     fig.update_xaxes(range=[min(all_times), max(all_times)])
     fig.update_yaxes(range=[price_min, price_max])
 
+
     # I want to have 2 graphs, one of the candlestick (main)
     # and one with a line connecting the current price (aux) of a given moment.
     '''fig.update_traces(
@@ -88,10 +89,9 @@ def update(fig, msg):
     return fig
 
 
-# Receives callbacks to update Zeppelin
 def register_callbacks(app, coin_graphs):
     """
-    Updates dashboard based on type of input
+    Updates Zeppelin based on type of Input
     :param app: Dash app
     :param coin_graphs: dict holding Figure objects for securities
     :return fig, str: Figure object and log lines to output

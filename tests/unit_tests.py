@@ -48,7 +48,7 @@ class RedisTests(unittest.TestCase):
         pass
 
     def redis_example(self):
-        rh.to_redis("blah")
+        rh.to_redis("test")
 
 if __name__ == '__main__':
     unittest.main()
