@@ -35,19 +35,30 @@ def update(fig, msg):
         sec_data = json_data_processing(data)
     else:
         sec_data = data_processing(data)
-
+    assert len(sec_data) == 1
 
     format = '%Y-%m-%d %H:%M:%S'
     time = list(map(lambda x: datetime.strptime(x, format), sec_data.keys()))
     price = list(map(float, sec_data.values()))
 
-    all_times += time
-    all_prices += price
+    # Updating price only if the timestamps are equal from data
+    if all_times:
+        if time[0] < all_times[-1]:
+            return dash.no_update
+        elif time[0] == all_times[-1]:
+            all_prices[-1] = price[0]
+        else:
+            all_times += time
+            all_prices += price
+    else:
+        all_times += time
+        all_prices += price
 
     # Temporary
     if len(all_times) > 10000:
-        all_times = all_times[5000:]
-        all_prices = all_prices[5000:]
+        all_times = all_times[1000:]
+        all_prices = all_prices[1000:]
+        log_status("info", "Data limit reached, truncating...")
 
     # Extending y-axis for easier viewing
     price_min = min(all_prices)

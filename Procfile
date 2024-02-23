@@ -1,1 +1,1 @@
-web: gunicorn dash_app.zeppelin:server
+web: gunicorn dash_app.zeppelin:server --daemon

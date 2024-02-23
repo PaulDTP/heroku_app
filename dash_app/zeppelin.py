@@ -21,7 +21,7 @@ from dash_app.callback_updates import update
 from dash_app.logger import get_logs, log_status
 
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, title="Zeppelin")
 server = app.server
 
 # Retrieving components for Zeppelin
