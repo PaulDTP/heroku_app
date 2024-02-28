@@ -54,7 +54,6 @@ tradingview = '''
   "watchlist": [
     "BINANCE:BTCUSDT",
     "NASDAQ:AAPL",
-    "TVC:DJI",
     "AMEX:DIA",
     "AMEX:SPY"
   ],
