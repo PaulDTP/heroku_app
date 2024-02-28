@@ -40,7 +40,7 @@ tradingview = '''
   <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
   {
   "width": "100%",
-  "height": "815",
+  "height": "800",
   "symbol": "BINANCE:BTCUSDT",
   "interval": "1",
   "timezone": "Etc/UTC",
