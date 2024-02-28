@@ -80,7 +80,7 @@ app.layout = html.Div(
     # List of all choices in [], then default selected choice
     #dcc.Dropdown([Prices', 'Real-time Trades'], 'Prices', id='dropdown'),
     dcc.Dropdown(options, options[0], id='dropdown'),
-    html.Iframe(id='tradingview',srcDoc=tradingview, style={"height": "800px", "width": "calc(100% - 5vw)", "margin": '0 auto',
+    html.Iframe(id='tradingview',srcDoc=tradingview, style={"height": "820px", "width": "calc(100% - 5vw)", "margin": '0 auto',
                                                             "border": "none", "justifyContent": "center", "align-items": "center"}
     ),
     #dcc.Graph(id='btc-candle', figure=coin_graphs[0]),
