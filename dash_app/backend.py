@@ -128,11 +128,6 @@ def dict_processing(msg):
         msg = json.loads(msg['data'])
     data = msg['data']
 
-    # DELETE SOON
-    if isinstance(data, str):
-        log_status("error", "JSON loading again")
-        data = json.loads(data)
-
     # symbol = data['s']  # Symbol (ex: BNBBTC)
     # event = data['e']  # Event type (kline, aggtrade, etc)
     sec_data['time'] = time_conv(data['E'])  # Event time ex: 1672515782136
@@ -148,77 +143,3 @@ def dict_processing(msg):
     elif '@trade' in msg['stream']:
         sec_data['value'] = float(data['p'])
     return sec_data
-
-
-# Payload Types
-'''
-Trade Stream Payload
-Update Speed: Real-time
-{
-  "e": "trade",     // Event type
-  "E": 1672515782136,   // Event time
-  "s": "BNBBTC",    // Symbol
-  "t": 12345,       // Trade ID
-  "p": "0.001",     // Price
-  "q": "100",       // Quantity
-  "b": 88,          // Buyer order ID
-  "a": 50,          // Seller order ID
-  "T": 1672515782136,   // Trade time
-  "m": true,        // Is the buyer the market maker?
-  "M": true         // Ignore
-}
-
-Candlesticks
-Update Speed: 2000ms
-{
-  "e": "kline",     // Event type
-  "E": 1672515782136,   // Event time
-  "s": "BNBBTC",    // Symbol
-  "k": {
-    "t": 1672515780000, // Kline start time
-    "T": 1672515839999, // Kline close time
-    "s": "BNBBTC",  // Symbol
-    "i": "1m",      // Interval
-    "f": 100,       // First trade ID
-    "L": 200,       // Last trade ID
-    "o": "0.0010",  // Open price
-    "c": "0.0020",  // Close price
-    "h": "0.0025",  // High price
-    "l": "0.0015",  // Low price
-    "v": "1000",    // Base asset volume
-    "n": 100,       // Number of trades
-    "x": false,     // Is this kline closed?
-    "q": "1.0000",  // Quote asset volume
-    "V": "500",     // Taker buy base asset volume
-    "Q": "0.500",   // Taker buy quote asset volume
-    "B": "123456"   // Ignore
-  }
-}
-24h Change 
-Update Speed: 1000ms
-{
-  "e": "24hrTicker",  // Event type
-  "E": 1672515782136,     // Event time
-  "s": "BNBBTC",      // Symbol
-  "p": "0.0015",      // Price change
-  "P": "250.00",      // Price change percent
-  "w": "0.0018",      // Weighted average price
-  "x": "0.0009",      // First trade(F)-1 price (first trade before the 24hr rolling window)
-  "c": "0.0025",      // Last price
-  "Q": "10",          // Last quantity
-  "b": "0.0024",      // Best bid price
-  "B": "10",          // Best bid quantity
-  "a": "0.0026",      // Best ask price
-  "A": "100",         // Best ask quantity
-  "o": "0.0010",      // Open price
-  "h": "0.0025",      // High price
-  "l": "0.0010",      // Low price
-  "v": "10000",       // Total traded base asset volume
-  "q": "18",          // Total traded quote asset volume
-  "O": 0,             // Statistics open time
-  "C": 1675216573749,      // Statistics close time
-  "F": 0,             // First trade ID
-  "L": 18150,         // Last trade Id
-  "n": 18151          // Total number of trades
-}
-'''

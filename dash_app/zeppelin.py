@@ -74,12 +74,7 @@ app.layout = html.Div(
     children=[
         dcc.Location(id='url', refresh=True),
     html.H2(children="Zeppelin"),
-    #html.Div(children=f"Last commit: {last_updated()} UTC"),
-    #dcc.Dropdown([Prices', 'Real-time Trades'], 'Prices', id='dropdown'),
-    #dcc.Dropdown(['Chart', 'Real-time Trades'], 'Real-time Trades', id='dropdown'),
     html.Div(id='graph_container'),
-    # dcc.Graph(id='btc-candle', figure=coin_graphs[0]),
-    # dcc.Graph(id='btc-trades', figure=coin_graphs[1]),
     WebSocket(id='ws-candles', url='wss://testnet.binance.vision/stream?streams=btcusdt@kline_1m'),
     WebSocket(id='ws-trades', url='wss://testnet.binance.vision/stream?streams=btcusdt@trade'),
     dcc.Interval(id='interval', interval=time_interval, n_intervals=0),
@@ -112,29 +107,8 @@ def display_page(pathname):
     elif pathname == '/app':
         return tradingview
 
-#     @app.callback(
-#     Output('graph_container', 'children'),
-#     Input("dropdown", "value")
-# )
-# def dropdown_changes(selection):
-#     """
-#     Changes Zeppelin's main page depending on dropdown selection
-#     :param selection: value from dropdown
-#     :return: selection made on main page
-#     """
-#     if selection == "Chart":
-#         return tradingview
-#     elif selection == 'Real-time Trades':
-#         return [btc_candle, btc_trades]
-
 try:
-    #create_rclient()
     register_callbacks(app, coin_graphs)
     log_status("info", "Starting...")
-
-    #app.run_server(debug=True)
 except Exception as e:
     log_status("warning", f"Error: {e}")
-finally:
-    #close_redis()
-    pass

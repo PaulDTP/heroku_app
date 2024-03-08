@@ -1,19 +1,17 @@
-'''
+"""
 @author Isaiah Terrell-Perica 
 @date 06/06/2023
 
 This file handles graph updates - callbacks for all Dash components in Zeppelin.
 
-From docs: 'callbacks should never modify variables outside of their scope - do not modify global variables'
-'''
-from dash import dash, Input, Output
+From docs: 'callbacks should never modify variables outside their scope - do not modify global variables'
+"""
 from datetime import datetime
-import time
-from dash import dcc
+
+from dash import dash, Input, Output
 
 from dash_app.backend import data_processing, dict_processing
 from dash_app.logger import get_logs, log_status
-from dash_app.zep_redis import from_redis
 
 # Would prefer to not have global
 trade_times = []
@@ -22,6 +20,7 @@ trade_prices = []
 candle_prices = []
 fmt = '%Y-%m-%d %H:%M:%S.%f'
 
+
 def update(fig, msg):
     """
     Updates Figure object from argument with data in msg
@@ -29,7 +28,7 @@ def update(fig, msg):
     :param msg: Websocket data to parse
     """
     global trade_times, candle_times, trade_prices, candle_prices
-    #data = from_redis()
+    # data = from_redis()
 
     data = msg
 
@@ -48,6 +47,7 @@ def update(fig, msg):
     else:
         return update_trades(fig, sec_data)
 
+
 def update_candle(fig, sec_data):
     global candle_times, candle_prices
     fig._open.append(sec_data['open'])
@@ -61,17 +61,10 @@ def update_candle(fig, sec_data):
         high=fig._high,
         low=fig._low,
         close=fig._close,
-        selector=dict(name="candle")  # will be main
+        selector=dict(name="candle")
     )
-    # Extending y-axis for easier viewing
-    price_min = min(fig._close)
-    price_max = max(fig._close)
-    extended_min = price_min - 0.25 * (price_max - price_min)
-    extended_max = price_max + 0.25 * (price_max - price_min)
-
-    #fig.update_xaxes(range=[min(candle_times), max(candle_times)])
-    #fig.update_yaxes(range=[extended_min, extended_max])
     return fig
+
 
 def update_trades(fig, sec_data):
     global trade_times, trade_prices
@@ -82,17 +75,9 @@ def update_trades(fig, sec_data):
         y=trade_prices,
         selector=dict(name="trade")
     )
-
-    # Extending y-axis for easier viewing
-    price_min = min(trade_prices)
-    price_max = max(trade_prices)
-    extended_min = price_min - 0.25 * (price_max - price_min)
-    extended_max = price_max + 0.25 * (price_max - price_min)
-
-    #fig.update_xaxes(range=[min(trade_times), max(trade_times)])
-    #fig.update_yaxes(range=[price_min, price_max])
     return fig
-# Receives callbacks to update Zeppelin
+
+
 def register_callbacks(app, coin_graphs):
     """
     Updates dashboard based on type of input
@@ -100,6 +85,7 @@ def register_callbacks(app, coin_graphs):
     :param coin_graphs: dict holding Figure objects for securities
     :return fig, str: Figure object and log lines to output
     """
+
     @app.callback(
         Output('logging', 'value'),
         Input('interval', 'n_intervals'),
@@ -112,7 +98,7 @@ def register_callbacks(app, coin_graphs):
     @app.callback(
         Output('btc-candles', 'figure'),
         Input("ws-candles", 'message'),
-        prevent_initial_call = True
+        prevent_initial_call=True
     )
     def update_c(msg):
         log_status("info", "Candle data received")
@@ -120,11 +106,12 @@ def register_callbacks(app, coin_graphs):
         if data is None:
             return dash.no_update
         return update_candle(coin_graphs[0], data)
+
     # === Trades ===
     @app.callback(
         Output('btc-trades', 'figure'),
         Input("ws-trades", 'message'),
-        prevent_initial_call = True
+        prevent_initial_call=True
     )
     def update_t(msg):
         log_status("info", "Trade data received")
@@ -132,7 +119,3 @@ def register_callbacks(app, coin_graphs):
         if data is None:
             return dash.no_update
         return update_trades(coin_graphs[1], data)
-
-    # def download(_):
-    #     logs = get_logs()
-    #     return '\n'.join(logs)
