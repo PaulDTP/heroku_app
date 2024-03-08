@@ -1,4 +1,4 @@
-'''
+"""
 @author Isaiah Terrell-Perica
 @date 05/31/2023
 
@@ -6,20 +6,24 @@ This file handles all calculations and data processing needed for coin graphs an
 
 - May need to separate processing for data or conversions
 - Should test time taken to run functions
-'''
-from datetime import datetime
-import subprocess
-
-import dash
-import pandas as pd
-import numpy as np
+"""
 import json
-import git
-from collections import defaultdict, deque
-from dash.dependencies import Input, Output
+import subprocess
+from datetime import datetime
 import plotly.graph_objs as go
 
-from dash_app.logger import log_status, get_logs
+import logging
+from dash_app.logger import log_status
+
+
+class MyFig(go.Figure):
+    def __init__(self):
+        super().__init__()
+        self._open = []
+        self._high = []
+        self._low = []
+        self._close = []
+
 
 def last_updated():
     """
@@ -30,28 +34,34 @@ def last_updated():
     return commit_date.decode('utf-8').strip()
 
 
-def make_graph(title):
+def make_graph(title, form):
     """
     Creates a blank graph ready for data
     :param title: title for created graph
+    :param form: type of graph to make
     :return fig: blank Figure object
     """
-    fig = go.Figure()
-    # fig.add_trace(go.Candlestick(name='main'))
-    fig.add_trace(go.Scatter(name='main', mode='lines'))
+    fig = MyFig()
+    if form == 'candle':
+        fig.add_trace(go.Candlestick(name='candle'))
+    elif form == 'line':
+        fig.add_trace(go.Scattergl(name='trade', mode='lines'))
     fig.update_layout(
         title=title,
         showlegend=False,
         xaxis=dict(
             type="date",
-            tickformat="%H:%M:%S" #%Y-%m-%d"  # Customizing date format
+            tickformat="%H:%M:%S.%f"  # %Y-%m-%d"  # Customizing date format
         ),
         yaxis=dict(
             tickformat=".2f",  # Precision of y labels
         ),
-        uirevision=True # maintains user state
+        # maintains user state
+        uirevision=True,
+        xaxis_rangeslider_visible=False
     )
     return fig
+
 
 def time_conv(timestamp):
     """
@@ -59,28 +69,12 @@ def time_conv(timestamp):
     :param timestamp: epoch time to convert
     :return: human-readable time
     """
-    return datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%d %H:%M:%S.%f')
 
 
-# Eventually this should be its own background worker:
-# - pull data from Postgresql database
-# - categorize data and do calculations
-# - push data to next process to populate the graph
-def data_processing(trades):
-    sec_data = {}
-    for data in trades:
-        symbol = data['symbol']  # Symbol (ex: BNBBTC)
-        event = data['info']['e']  # Event type (kline, aggtrade, etc)
-        timestamp = time_conv(data['timestamp'])  # Event time ex: 1672515782136
-
-        sec_data[timestamp] = data['price']
-    if len(sec_data) > 1:
-        log_status("error", "Processing funct. larger than 1")
-    return sec_data
-
-def json_data_processing(trades):
+def data_processing(data):
     """
-    JSON Loads:
+    Format:
     {'e': 'trade',
      'E': 1708580838879,
      's': 'BTCUSDT',
@@ -92,20 +86,69 @@ def json_data_processing(trades):
      'T': 1708580838878,
      'm': True,
      'M': True}
-    :param trades: trades to parse
+    """
+    print(data)
+    sec_data = {}
+    # symbol = data['s']  # Symbol (ex: BNBBTC)
+    # event = data['e']  # Event type (kline, aggtrade, etc)
+    timestamp = time_conv(data['E'])  # Event time ex: 1672515782136
+    if data['e'] == 'trade':
+        sec_data[timestamp] = float(data['p'])
+    else:
+        data = data['k']
+        # timestamp = time_conv(data['t'])  # Candle start time ex: 1672515782000 -> interval start
+        sec_data['time'] = timestamp
+        sec_data['open'] = float(data['o'])
+        sec_data['high'] = float(data['h'])
+        sec_data['low'] = float(data['l'])
+        sec_data['close'] = float(data['c'])
+    return sec_data
+
+
+def dict_processing(msg):
+    """
+    JSON loads format (must be string not dict):
+    '{'e': 'trade',
+     'E': 1708580838879,
+     's': 'BTCUSDT',
+     't': 1168941,
+     'p': '51573.88000000',
+     'q': '0.00010000',
+     'b': 5630322,
+     'a': 5630360,
+     'T': 1708580838878,
+     'm': True,
+     'M': True}'
+    :param msg: msg to parse
     :return sec_data: dict with key time and value price
     """
     sec_data = {}
-    data = json.loads(trades['data'])
+    # if msg is in alt. format
+    if 'stream' not in msg.keys():
+        msg = json.loads(msg['data'])
+    data = msg['data']
 
-    symbol = data['s']  # Symbol (ex: BNBBTC)
-    event = data['e']  # Event type (kline, aggtrade, etc)
-    timestamp = time_conv(data['E'])  # Event time ex: 1672515782136
+    # DELETE SOON
+    if isinstance(data, str):
+        log_status("error", "JSON loading again")
+        data = json.loads(data)
 
-    sec_data[timestamp] = data['p']
-    if len(sec_data) > 1:
-        log_status("error", "Processing funct. returning larger than 1")
+    # symbol = data['s']  # Symbol (ex: BNBBTC)
+    # event = data['e']  # Event type (kline, aggtrade, etc)
+    sec_data['time'] = time_conv(data['E'])  # Event time ex: 1672515782136
+    if '@kline' in msg['stream']:
+        # kline data
+        data = data['k']
+        # timestamp = time_conv(data['t'])  # Candle start time ex: 1672515782000 -> interval start
+        # sec_data['time'] = timestamp
+        sec_data['open'] = float(data['o'])
+        sec_data['high'] = float(data['h'])
+        sec_data['low'] = float(data['l'])
+        sec_data['close'] = float(data['c'])
+    elif '@trade' in msg['stream']:
+        sec_data['value'] = float(data['p'])
     return sec_data
+
 
 # Payload Types
 '''
@@ -178,5 +221,4 @@ Update Speed: 1000ms
   "L": 18150,         // Last trade Id
   "n": 18151          // Total number of trades
 }
-
 '''

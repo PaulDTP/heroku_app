@@ -9,19 +9,26 @@ From docs: 'callbacks should never modify variables outside of their scope - do 
 from dash import dash, Input, Output
 from datetime import datetime
 import time
+from dash import dcc
 
-from dash_app.backend import data_processing, json_data_processing
+from dash_app.backend import data_processing, dict_processing
 from dash_app.logger import get_logs, log_status
 from dash_app.zep_redis import from_redis
 
 # Would prefer to not have global
-all_times = []
-all_prices = []
-log_buffer = []
+trade_times = []
+candle_times = []
+trade_prices = []
+candle_prices = []
+fmt = '%Y-%m-%d %H:%M:%S.%f'
 
-# Updates a fig graph depending on the coin type
 def update(fig, msg):
-    global all_times, all_prices
+    """
+    Updates Figure object from argument with data in msg
+    :param fig: Figure to be updated
+    :param msg: Websocket data to parse
+    """
+    global trade_times, candle_times, trade_prices, candle_prices
     #data = from_redis()
 
     data = msg
@@ -29,99 +36,102 @@ def update(fig, msg):
     # Only update graph if data exists
     if not data:
         return dash.no_update
+    # Determine call based on msg format
     if isinstance(msg, dict):
-        sec_data = json_data_processing(data)
+        sec_data = dict_processing(msg)
     else:
         sec_data = data_processing(data)
-    assert len(sec_data) == 1
-
-    format = '%Y-%m-%d %H:%M:%S'
-    time = list(map(lambda x: datetime.strptime(x, format), sec_data.keys()))
-    price = list(map(float, sec_data.values()))
-
-    # Updating price only if the timestamps are equal from data
-    if all_times:
-        if time[0] < all_times[-1]:
-            return dash.no_update
-        elif time[0] == all_times[-1]:
-            all_prices[-1] = price[0]
-        else:
-            all_times += time
-            all_prices += price
+    # Kline Data
+    if len(sec_data) == 5:
+        return update_candle(fig, sec_data)
+    # Trade Data
     else:
-        all_times += time
-        all_prices += price
+        return update_trades(fig, sec_data)
 
-    # Temporary
-    if len(all_times) > 10000:
-        all_times = all_times[1000:]
-        all_prices = all_prices[1000:]
-        log_status("info", "Data limit reached, truncating...")
-
+def update_candle(fig, sec_data):
+    global candle_times, candle_prices
+    fig._open.append(sec_data['open'])
+    fig._high.append(sec_data['high'])
+    fig._low.append(sec_data['low'])
+    fig._close.append(sec_data['close'])
+    candle_times.append(datetime.strptime(sec_data['time'], fmt))
+    fig.update_traces(
+        x=candle_times,
+        open=fig._open,
+        high=fig._high,
+        low=fig._low,
+        close=fig._close,
+        selector=dict(name="candle")  # will be main
+    )
     # Extending y-axis for easier viewing
-    price_min = min(all_prices)
-    price_max = max(all_prices)
+    price_min = min(fig._close)
+    price_max = max(fig._close)
     extended_min = price_min - 0.25 * (price_max - price_min)
     extended_max = price_max + 0.25 * (price_max - price_min)
-    fig.update_xaxes(range=[min(all_times), max(all_times)])
-    fig.update_yaxes(range=[price_min, price_max])
 
-    # I want to have 2 graphs, one with candlesticks (main)
-    # and one with a line connecting the current price (aux) of a given moment.
-    '''fig.update_traces(
-        x=time_axis,
-        open=open_prices,
-        high=high_prices,
-        low=low_prices,
-        close=close_prices,
-        selector=dict(name="aux") # will be main
-    )'''
-    fig.update_traces(
-        x=all_times,
-        y=all_prices,
-        selector=dict(name="main")
-    )
-    #fig['layout']['xaxis']['ticktext'] = time[0].strftime('%Y-%m-%d')
+    #fig.update_xaxes(range=[min(candle_times), max(candle_times)])
+    #fig.update_yaxes(range=[extended_min, extended_max])
     return fig
 
+def update_trades(fig, sec_data):
+    global trade_times, trade_prices
+    trade_times.append(datetime.strptime(sec_data['time'], fmt))
+    trade_prices.append(sec_data['value'])
+    fig.update_traces(
+        x=trade_times,
+        y=trade_prices,
+        selector=dict(name="trade")
+    )
 
-def register_callbacks(app):#, coin_graphs):
+    # Extending y-axis for easier viewing
+    price_min = min(trade_prices)
+    price_max = max(trade_prices)
+    extended_min = price_min - 0.25 * (price_max - price_min)
+    extended_max = price_max + 0.25 * (price_max - price_min)
+
+    #fig.update_xaxes(range=[min(trade_times), max(trade_times)])
+    #fig.update_yaxes(range=[price_min, price_max])
+    return fig
+# Receives callbacks to update Zeppelin
+def register_callbacks(app, coin_graphs):
     """
-    Updates Zeppelin based on type of Input
+    Updates dashboard based on type of input
     :param app: Dash app
     :param coin_graphs: dict holding Figure objects for securities
     :return fig, str: Figure object and log lines to output
     """
-
     @app.callback(
-         Output('logging', 'value'),
-        Input('interval', 'n_intervals')
+        Output('logging', 'value'),
+        Input('interval', 'n_intervals'),
+        prevent_initial_call=True
     )
     def update_log(_):
-        logs = get_logs()
-        if logs:
-            return '\n'.join(get_logs())
-        else:
+        return '\n'.join(get_logs())
+
+    # === Candles ===
+    @app.callback(
+        Output('btc-candles', 'figure'),
+        Input("ws-candles", 'message'),
+        prevent_initial_call = True
+    )
+    def update_c(msg):
+        log_status("info", "Candle data received")
+        data = dict_processing(msg)
+        if data is None:
             return dash.no_update
-
-    # @app.callback(
-    #     Output('btc-graph', 'figure'),
-    #     Input("ws", 'message')
-    # )
-    # def update_graph(msg):
-    #     return update(coin_graphs[0], msg)
-
-
-    # Changes Zeppelin's main page depending on dropdown selection
-    # @return the selection made on main page
-    # @app.callback(Output('*-graph'))
-    # def dropdown_changes(_):
-    #    return figs[coin]
-
-    '''@app.callback(
-        Output('logs', 'value'),
-        Input('interval', 'n_intervals')
-    )'''
+        return update_candle(coin_graphs[0], data)
+    # === Trades ===
+    @app.callback(
+        Output('btc-trades', 'figure'),
+        Input("ws-trades", 'message'),
+        prevent_initial_call = True
+    )
+    def update_t(msg):
+        log_status("info", "Trade data received")
+        data = dict_processing(msg)
+        if data is None:
+            return dash.no_update
+        return update_trades(coin_graphs[1], data)
 
     # def download(_):
     #     logs = get_logs()
